@@ -18,6 +18,8 @@
         [References createLine:self.view view:line xPos:menuBar.frame.origin.x yPos:menuBar.frame.origin.y+menuBar.frame.size.height+7];
     [References createLine:self.view view:line2 xPos:0 yPos:_tabBar.frame.origin.y];
     [References cornerRadius:_donebutton radius:5.0f];
+    [self getRide];
+    
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }
@@ -41,6 +43,9 @@
     cell.backgroundColor = [UIColor clearColor];
     [References cornerRadius:cell.image radius:cell.image.frame.size.width/2];
     cell.image.image = [UIImage imageNamed:@"driver.jpg"];
+    rideObject *ride = myRequests[indexPath.row];
+    cell.recipient.text = [ride valueForKey:@"applicant"];
+    cell.time.text = [ride valueForKey:@"text"];
     [References cornerRadius:cell.card radius:5.0f];
     cell.card.frame = CGRectMake(16, cell.card.frame.origin.y, [References screenWidth]-32, cell.card.frame.size.height);
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -51,7 +56,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 1;    //count number of row from counting array hear cataGorry is An Array
+    return myRequestsCount;    //count number of row from counting array hear cataGorry is An Array
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -81,7 +86,7 @@
     // Parameters
     NSDictionary *tmp = [[NSDictionary alloc] init];
     tmp = @{
-            @"type"     : @"myTrips",
+            @"type"     : @"myRequests",
             @"user"     : [[NSUserDefaults standardUserDefaults] objectForKey:@"user"]
             };
     
@@ -100,44 +105,14 @@
                                    NSString *responseBody = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                                    myRequests_raw = [responseBody componentsSeparatedByString:@"~"];
                                    myRequestsCount = [myRequests_raw[0] intValue];
-                                   int a = 1;
+                                   int a = 0;
                                    for (int b = 0; b <myRequestsCount; b++) {
                                        rideObject *ride = [[rideObject alloc] init];
-                                       ride.founder = myRequests_raw[a+1];
-                                       ride.text = myTrips_raw[a+2];
-                                       ride.from = myTrips_raw[a+3];
-                                       ride.to = myTrips_raw[a+4];
-                                       double seconds = [myTrips_raw[a+5] doubleValue];
-                                       NSTimeInterval timeInterval = (NSTimeInterval)seconds;
-                                       NSDate *rideDate = [NSDate dateWithTimeIntervalSince1970:timeInterval];
-                                       NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                                       [formatter setDateFormat:@"LLL"];
-                                       NSString *dateText = [formatter stringFromDate:rideDate];
-                                       [formatter setDateFormat:@"d"];
-                                       NSString *dateTime = [formatter stringFromDate:rideDate];
-                                       [formatter setDateFormat:@"h:m a"];
-                                       NSString *dateHour = [formatter stringFromDate:rideDate];
-                                       ride.month = dateText;
-                                       ride.time = dateHour;
-                                       ride.day = dateTime;
-                                       ride.cost = myTrips_raw[a+6];
-                                       ride.seats = myTrips_raw[a+7];
-                                       ride.rideID = myTrips_raw[a+8];
-                                       ride.type = myTrips_raw[a+11];
-                                       ride.passengers = nil;
-                                       NSDateFormatter *getDayName = [[NSDateFormatter alloc] init];
-                                       NSDateFormatter *getDayNumber = [[NSDateFormatter alloc] init];
-                                       NSDateFormatter *getDayMonth = [[NSDateFormatter alloc] init];
-                                       NSDateFormatter *getDayTime = [[NSDateFormatter alloc] init];
-                                       NSDateFormatter *getDayPeriod = [[NSDateFormatter alloc] init];
-                                       [getDayName setDateFormat:@"eee"];
-                                       [getDayNumber setDateFormat:@"d"];
-                                       [getDayMonth setDateFormat:@"MMM"];
-                                       [getDayTime setDateFormat:@"h"];
-                                       [getDayPeriod setDateFormat:@"a"];
-                                       ride.fullText = [NSString stringWithFormat:@"%@, %@ %@ around %@ %@",[getDayName stringFromDate:rideDate],[getDayMonth stringFromDate:rideDate],[getDayNumber stringFromDate:rideDate],[getDayTime stringFromDate:rideDate],[getDayPeriod stringFromDate:rideDate]];
-                                       [myTrips addObject:ride];
-                                       [tripcollection reloadData];
+                                       ride.applicant = myRequests_raw[a+1];
+                                       ride.rideID = myRequests_raw[a+2];
+                                       ride.text = myRequests_raw[a+3];
+                                       [myRequests addObject:ride];
+                                       [_table reloadData];
                                    }
                                    
                                }}];

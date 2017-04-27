@@ -12,8 +12,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *card;
 @property (weak, nonatomic) IBOutlet UILabel *recipient;
+@property (weak, nonatomic) IBOutlet UILabel *time;
 @property (weak, nonatomic) IBOutlet UIImageView *image;
-@property (weak, nonatomic) IBOutlet UILabel *grade;
 @property (weak, nonatomic) IBOutlet UIButton *decline;
 @property (weak, nonatomic) IBOutlet UIButton *confirm;
 

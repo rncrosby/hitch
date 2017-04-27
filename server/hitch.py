@@ -209,9 +209,7 @@ def index():
                 currentObject = i
                 returnObjects = returnObjects + currentObject['applicant'] + '~'
                 returnObjects = returnObjects + str(currentObject['id']) + '~'
-                returnObjects = returnObjects + currentObject['plainText'] + '~'
                 returnObjects = returnObjects + currentObject['plainTime'] + '~'
-                returnObjects = returnObjects + str(currentObject['date']) + '~'
             print returnObjects
             return returnObjects
         else:
