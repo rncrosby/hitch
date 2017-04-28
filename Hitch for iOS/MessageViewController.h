@@ -23,6 +23,7 @@
     int myRides;
     NSArray *myTrips_raw;
     NSMutableArray *arrayOfMessages;
+    NSMutableArray *arrayOfTripMessages;
     UIView *line,*line2,*line3;
     BOOL statusBarLight;
     __weak IBOutlet UILabel *tabBar;
@@ -65,6 +66,7 @@
     __weak IBOutlet UILabel *infoTime;
     __weak IBOutlet UILabel *infoTemperature;
     NSString *rideDriver;
+    __weak IBOutlet UILabel *messageHeader;
 }
 - (IBAction)Done:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *hideView;

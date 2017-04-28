@@ -64,7 +64,7 @@ def index():
         cost = json['cost']
         rideID = json['rideID']
         ridedb = TinyDB('rides.json')
-        ridedb.insert({'rideFounder': name, 'riderNames': '', 'id': rideID, 'cost': cost,'plainText': textForm, 'plainTime' : timetextForm,'rideFrom': zipFrom, 'rideTo': zipTo, 'date': float(when), 'seats': int(seats), 'riders': int(0)})
+        ridedb.insert({'rideFounder': name, 'riderNames': '', 'messages' : '','id': rideID, 'cost': cost,'plainText': textForm, 'plainTime' : timetextForm,'rideFrom': zipFrom, 'rideTo': zipTo, 'date': float(when), 'seats': int(seats), 'riders': int(0)})
         print 'Success: Ride Posted'
         return 'Ride Request Posted'
     # APPLY FOR RIDE
@@ -177,6 +177,31 @@ def index():
                 returnObjects = returnObjects + str(currentObject['date']) + '~'
                 returnObjects = returnObjects + str(currentObject['cost']) + '~'
                 returnObjects = returnObjects + str(currentObject['seats'])
+            print "Success: Found Ride"
+            return returnObjects
+        else:
+            print 'Error'
+            return 'Error'
+    # GET TRIP
+    if accesstype == 'getTripPage':
+        ridedb = TinyDB('rides.json')
+        rideID = json['ID']
+        Search = Query()
+        returneddata = ridedb.search(Search.id == rideID)
+        if returneddata != 0:
+            returnObjects = ''
+            for i in returneddata:
+                currentObject = i
+                returnObjects = returnObjects + currentObject['rideFounder'] + '~' # 0
+                returnObjects = returnObjects + currentObject['plainText'] + '~' # 1
+                returnObjects = returnObjects + str(currentObject['rideFrom']) + '~' # 2
+                returnObjects = returnObjects + str(currentObject['rideTo']) + '~' # 3
+                returnObjects = returnObjects + str(currentObject['date']) + '~' # 4
+                returnObjects = returnObjects + str(currentObject['cost']) + '~' # 5
+                returnObjects = returnObjects + currentObject['messages'] + '~' # 6
+                returnObjects = returnObjects + currentObject['riderNames'] + '~' # 7
+                returnObjects = returnObjects + str(currentObject['riders']) + '~' # 8
+                returnObjects = returnObjects + str(currentObject['seats']) # 9
             print "Success: Found Ride"
             return returnObjects
         else:

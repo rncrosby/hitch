@@ -10,4 +10,8 @@
 
 @implementation rideObject
 
+-(NSArray*)getPassengers{
+    return _passengers;
+}
+
 @end

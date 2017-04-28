@@ -10,5 +10,5 @@
 
 @interface rideObject : NSObject
 @property NSString *founder, *applicant, *rideID,*from, *fullText, *text, *to, *day, *cost, *seats, *time, *month, *type;
-@property NSArray *passengers;
+@property NSArray *passengers,*messages;
 @end

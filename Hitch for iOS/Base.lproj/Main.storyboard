@@ -822,6 +822,9 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
+                                <connections>
+                                    <outlet property="delegate" destination="dwv-fP-kF2" id="Mgz-Fd-Kqq"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -843,6 +846,7 @@
                         <outlet property="infoTo" destination="aB0-Fe-DKd" id="yS6-me-l9O"/>
                         <outlet property="menuBar" destination="DLa-cu-JZo" id="2iC-b6-5uZ"/>
                         <outlet property="messageField" destination="63X-0K-0BZ" id="OeA-8e-sx0"/>
+                        <outlet property="messageHeader" destination="u1k-wX-GJD" id="baH-jH-MBg"/>
                         <outlet property="requestsButton" destination="rXE-uF-aag" id="TWx-gb-Id9"/>
                         <outlet property="routeCard" destination="Lp9-s4-I7c" id="7Ym-vK-s5m"/>
                         <outlet property="routeView" destination="kYj-ra-MuI" id="nBz-V1-T0a"/>

@@ -17,6 +17,7 @@
 - (void)viewDidLoad {
     [References textFieldInset:messageField];
     arrayOfMessages = [[NSMutableArray alloc] init];
+    arrayOfTripMessages = [[NSMutableArray alloc] init];
     [conversationView setContentSize:CGSizeMake([References screenWidth], [References screenHeight])];
     [References createLine:self.view view:line xPos:menuBar.frame.origin.x yPos:menuBar.frame.origin.y+menuBar.frame.size.height+7];
     [References createLine:self.view view:line2 xPos:0 yPos:tabBar.frame.origin.y];
@@ -342,6 +343,9 @@
         }
     } else if (isPanel == 2) {
         [References moveDown:tripView yChange:1334];
+        for (int x = 0; x<=arrayOfTripMessages.count-1; x++) {
+            [arrayOfTripMessages[x] removeFromSuperview];
+        }
     }
     [References moveDown:messageField yChange:667];
     [References moveDown:_hideView yChange:667];
@@ -604,7 +608,7 @@
     // Parameters
     NSDictionary *tmp = [[NSDictionary alloc] init];
     tmp = @{
-            @"type"     : @"getRide",
+            @"type"     : @"getTripPage",
             @"ID" : queryNumber
             };
     
@@ -645,6 +649,59 @@
                                    infoMonth.text = dateText;
                                    infoTime.text = dateHour;
                                    infoDate.text = dateTime;
+                                   selectedTrip.messages = info[6];
+                                   NSArray *riders = [info[7] componentsSeparatedByString:@"%"];
+                                   selectedTrip.passengers = riders;
+                                   NSArray *ridemessages = [info[6] componentsSeparatedByString:@"%"];
+                                   selectedTrip.messages = ridemessages;
+                                   int messagesHeight = 0;
+                                   // messages part
+                                   int startY = messageHeader.frame.origin.y + messageHeader.frame.size.height;
+                                   for (int x = 0; x<ridemessages.count-1; x++) {
+                                       NSArray *message = [ridemessages[x] componentsSeparatedByString:@"&&"];
+                                       NSString *messageData = message[0];
+                                       NSString *sender = message[1];
+                                       
+                                       
+                                       int lineHeight = 25;
+                                       int lineCount = 1;
+                                       if (messageData.length > 25) {
+                                           lineCount = 2;
+                                           if (messageData.length > 50) {
+                                               lineCount = 3;
+                                           }
+                                       }
+                                       int bubbleSize = lineCount * lineHeight;
+                                       UILabel *messageText = [[UILabel alloc] initWithFrame:CGRectMake(16, startY, [References screenWidth]-32,bubbleSize+6)];
+                                       startY = messageText.frame.origin.y+15+bubbleSize;
+                                       [messageText setNumberOfLines:lineCount];
+                                       NSMutableParagraphStyle *style =  [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+                                       style.alignment = NSTextAlignmentJustified;
+                                       style.firstLineHeadIndent = 10.0f;
+                                       style.headIndent = 10.0f;
+                                       style.tailIndent = -10.0f;
+                                       
+                                       NSAttributedString *attrText = [[NSAttributedString alloc] initWithString:messageData attributes:@{ NSParagraphStyleAttributeName : style}];
+                                       
+                                       messageText.attributedText = attrText;
+                                       
+                                       [messageText setFont:[UIFont boldSystemFontOfSize:20.0f]];
+                                       if ([sender isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"user"]]) {
+                                           [messageText setBackgroundColor:[UIColor paperColorBlueA400]];
+                                           [messageText setTextColor:[UIColor whiteColor]];
+                                       } else {
+                                           [messageText setBackgroundColor:[UIColor paperColorGray100]];
+                                           [messageText setTextColor:[UIColor blackColor]];
+                                       }
+                                       if (x > 1) {
+                                           messagesHeight = messagesHeight + (int)messageText.frame.size.height;
+                                       }
+                                       [arrayOfTripMessages addObject:messageText];
+                                       [References cornerRadius:messageText radius:5.0f];
+                                       [tripView addSubview:messageText];
+                                   }
+                                   tripView.contentSize = CGSizeMake([References screenWidth], tripView.frame.size.height + messagesHeight);
+                                   // directions part
                                    CLGeocoder* geocoder = [CLGeocoder new];
                                    [geocoder geocodeAddressString:info[2]
                                                 completionHandler:^(NSArray* placemarks, NSError* error){
