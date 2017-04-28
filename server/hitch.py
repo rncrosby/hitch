@@ -64,7 +64,7 @@ def index():
         cost = json['cost']
         rideID = json['rideID']
         ridedb = TinyDB('rides.json')
-        ridedb.insert({'rideFounder': name, 'riderNames': None, 'id': rideID, 'cost': cost,'plainText': textForm, 'plainTime' : timetextForm,'rideFrom': zipFrom, 'rideTo': zipTo, 'date': float(when), 'seats': int(seats), 'riders': int(0)})
+        ridedb.insert({'rideFounder': name, 'riderNames': '', 'id': rideID, 'cost': cost,'plainText': textForm, 'plainTime' : timetextForm,'rideFrom': zipFrom, 'rideTo': zipTo, 'date': float(when), 'seats': int(seats), 'riders': int(0)})
         print 'Success: Ride Posted'
         return 'Ride Request Posted'
     # APPLY FOR RIDE
@@ -100,6 +100,24 @@ def index():
         else:
             print("Already applied, restricting applications")
             return "Y"
+    # CONFIRM APPLICATION
+    if accesstype == 'confirmRequest':
+        name = json['user']
+        applicant = json['applicant']
+        rideID = json['rideID']
+        ridedb = TinyDB('rides.json')
+        Search = Query()
+        returneddata = ridedb.search(Search.id == rideID)
+        rideObject = returneddata[0]
+        riderNames = rideObject['riderNames'] + applicant + '%'
+        riderCount = int(rideObject['riders']) + 1
+        ridedb.update({'riderNames': riderNames}, Search.id == rideID)
+        ridedb.update({'riders': int(riderCount)}, Search.id == rideID)
+        pendingdb = TinyDB('pendingrides.json')
+        pendingSearch = Query()
+        pendingdb.remove(pendingSearch.id == rideID)
+        print 'Success: Ride Confirmed'
+        return 'Ride Request Posted'
     # SEND MESSAGE
     if accesstype == 'sendMessage':
         sender = json['sender']
@@ -168,17 +186,21 @@ def index():
     if accesstype == 'myTrips':
         returnObjects = ''
         user = json['user']
-        ridedb = TinyDB('pendingrides.json')
+        pendingdb = TinyDB('pendingrides.json')
         Request = Query()
-        if ridedb.contains(Request.rideFounder == user):
+        if pendingdb.contains(Request.rideFounder == user):
             returnObjects = returnObjects + 'Y' + '~'
         else:
             returnObjects = returnObjects + 'N' + '~'
         Search = Query()
-        returneddata = ridedb.search(Search.applicant == user)
-        returnObjects = returnObjects + str(len(returneddata)) + '~'
-        if returneddata != 0:
-            for i in returneddata:
+        pendingdata = pendingdb.search(Search.applicant == user)
+        confirmeddb = TinyDB('rides.json')
+        Search = Query()
+        confirmeddata = confirmeddb.search(((Search.applicant == user) | (Search.rideFounder == user)) & (Search.riders > 0))
+        tripCount = len(pendingdata) + len(confirmeddata)
+        returnObjects = returnObjects + str(tripCount) + '~'
+        if pendingdata != 0:
+            for i in pendingdata:
                 currentObject = i
                 returnObjects = returnObjects + currentObject['rideFounder'] + '~'
                 returnObjects = returnObjects + currentObject['plainText'] + '~'
@@ -191,6 +213,20 @@ def index():
                 returnObjects = returnObjects + str(currentObject['id']) + '~'
                 returnObjects = returnObjects + str(currentObject['riders']) + '~'
                 returnObjects = returnObjects + 'PENDING' + '~'
+        if confirmeddata != 0:
+            for i in confirmeddata:
+                currentObject = i
+                returnObjects = returnObjects + currentObject['rideFounder'] + '~'
+                returnObjects = returnObjects + currentObject['plainText'] + '~'
+                returnObjects = returnObjects + currentObject['plainTime'] + '~'
+                returnObjects = returnObjects + str(currentObject['rideFrom']) + '~'
+                returnObjects = returnObjects + str(currentObject['rideTo']) + '~'
+                returnObjects = returnObjects + str(currentObject['date']) + '~'
+                returnObjects = returnObjects + str(currentObject['cost']) + '~'
+                returnObjects = returnObjects + str(currentObject['seats']) + '~'
+                returnObjects = returnObjects + str(currentObject['id']) + '~'
+                returnObjects = returnObjects + str(currentObject['riders']) + '~'
+                returnObjects = returnObjects + 'CONFIRMED' + '~'
             print returnObjects
             return returnObjects
         else:

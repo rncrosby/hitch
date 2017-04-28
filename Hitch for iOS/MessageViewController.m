@@ -325,7 +325,6 @@
             @"sender" : [[NSUserDefaults standardUserDefaults] objectForKey:@"user"],
             @"message" : message
             };
-    
     NSError *error;
     NSData *postdata = [NSJSONSerialization dataWithJSONObject:tmp options:0 error:&error];
     [request setHTTPBody:postdata];

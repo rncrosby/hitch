@@ -51,6 +51,10 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     cell.decline.frame = CGRectMake(16, cell.decline.frame.origin.y, cell.card.frame.size.width/2, cell.decline.frame.size.height);
     cell.confirm.frame = CGRectMake(cell.card.frame.size.width/2, cell.confirm.frame.origin.y, cell.card.frame.size.width/2, cell.confirm.frame.size.height);
+    [cell.confirm setTag:indexPath.row];
+    [cell.confirm addTarget:self
+                   action:@selector(confirmApplicant:)
+         forControlEvents:UIControlEventTouchUpInside];
     return cell;
 }
 
@@ -67,7 +71,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
 }
 
 - (IBAction)done:(id)sender {
@@ -117,5 +121,46 @@
                                    
                                }}];
     
+}
+
+-(void)confirmApplicant:(UIButton *)sender {
+    rideObject *ride = myRequests[sender.tag];
+    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    request.HTTPMethod = @"POST";
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    // NSError *actualerror = [[NSError alloc] init];
+    // Parameters
+    NSDictionary *tmp = [[NSDictionary alloc] init];
+    tmp = @{
+            @"type"     : @"confirmRequest",
+            @"user"     : [[NSUserDefaults standardUserDefaults] objectForKey:@"user"],
+            @"applicant"     :[ride valueForKey:@"applicant"],
+            @"rideID"   : [ride valueForKey:@"rideID"]
+            };
+    
+    NSError *error;
+    NSData *postdata = [NSJSONSerialization dataWithJSONObject:tmp options:0 error:&error];
+    [request setHTTPBody:postdata];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response,
+                                               NSData *data,
+                                               NSError *error) {
+                               if (error) {
+                                   // Returned Error
+                                   NSLog(@"Unknown Error Occured");
+                               } else {
+                                   if (myRequestsCount == 1) {
+                                       [self dismissViewControllerAnimated:YES completion:nil];
+                                   } else {
+                                       [self getRide];
+                                   }
+                                   
+                                   
+                                   
+                               }}];
+
 }
 @end

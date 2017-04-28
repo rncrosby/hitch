@@ -1,1 +1,1 @@
-{"_default": {"1": {"rideFounder": "rob", "rideFrom": 94102, "cost": 5, "plainText": "San Francisco, CA to Oakland, CA", "applicant": "rob", "id": "ujmztXK4XX", "rideTo": 94612, "seats": 0, "date": 1494278604.0, "riders": 0, "plainTime": "Mon, May 8 close to 2 PM"}, "2": {"rideFounder": "Ben Brown", "cost": 9, "seats": 3, "date": 1493432235.0, "id": "6G9wBvBqEd", "plainTime": "Fri, Apr 28 around 7 PM", "rideFrom": 94102, "plainText": "San Francisco, CA to Reno, NV", "applicant": "robby", "riders": 0, "rideTo": 89501}}}
+{"_default": {}}
