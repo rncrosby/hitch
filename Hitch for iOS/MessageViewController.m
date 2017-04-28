@@ -25,6 +25,13 @@
     [References borderColor:Done color:[UIColor blackColor]];
     [References cornerRadius:messageField radius:5.0f];
     conversations = [[NSMutableArray alloc] init];
+    [References cornerRadius:routeView radius:5.0f];
+    [References cornerRadius:routeCard radius:5.0f];
+    [References cornerRadius:infoCost radius:5.0f];
+    [References cornerRadius:infoMonth radius:5.0f];
+    [References cornerRadius:infoDate radius:5.0f];
+    [References cornerRadius:infoTime radius:5.0f];
+    [References cornerRadius:infoTemperature radius:5.0f];
     [super viewDidLoad];
     [self getAllMessages];
     [self getRide];
@@ -102,6 +109,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    isPanel = 1;
     NSArray *tempConversations = [conversations[indexPath.row] componentsSeparatedByString:@":"];
     [self getConversation:tempConversations[0] personB:tempConversations[1]];
     blackOverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [References screenWidth], [References screenHeight])];
@@ -152,6 +160,40 @@
         [cell.drivername setTextColor:[UIColor blackColor]];
     }
     return cell;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    rideObject *ride = myTrips[indexPath.row];
+    [self getTrip:[ride valueForKey:@"rideID"]];
+    [routeView removeAnnotations:routeView.annotations];
+    startItem = nil;
+    endItem = nil;
+    directionsRequest = [MKDirectionsRequest new];
+    havePoints = [NSTimer scheduledTimerWithTimeInterval:0.1f
+                                                  target:self
+                                                selector:@selector(getDirections)
+                                                userInfo:nil
+                                                 repeats:YES];
+    routeView.delegate = self;
+
+    isPanel = 2;
+    blackOverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [References screenWidth], [References screenHeight])];
+    [blackOverView setBackgroundColor:[UIColor blackColor]];
+    [blackOverView setAlpha:0];
+    [self.view addSubview:blackOverView];
+    [self.view bringSubviewToFront:blackOverView];
+    [self.view bringSubviewToFront:tripView];
+    [self.view bringSubviewToFront:messageField];
+    [self.view bringSubviewToFront:_hideView];
+    [References fade:blackOverView alpha:0.9f];
+    [References moveUp:tripView yChange:1334];
+    [References moveUp:messageField yChange:667];
+    [References moveUp:_hideView yChange:667];
+    statusBarLight = YES;
+    [UIView animateWithDuration:0.8 animations:^{
+        [self setNeedsStatusBarAppearanceUpdate];
+    }];
+
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle{
@@ -293,12 +335,16 @@
 }
 - (IBAction)hideView:(id)sender {
     [References fadeOut:blackOverView];
-    [References moveDown:conversationView yChange:667];
+    if (isPanel == 1) {
+           [References moveDown:conversationView yChange:667];
+        for (int x = 0; x<=arrayOfMessages.count-1; x++) {
+            [arrayOfMessages[x] removeFromSuperview];
+        }
+    } else if (isPanel == 2) {
+        [References moveDown:tripView yChange:1334];
+    }
     [References moveDown:messageField yChange:667];
     [References moveDown:_hideView yChange:667];
-    for (int x = 0; x<=arrayOfMessages.count-1; x++) {
-        [arrayOfMessages[x] removeFromSuperview];
-    }
     [messageField setText:@""];
     statusBarLight = NO;
     [UIView animateWithDuration:0.8 animations:^{
@@ -400,10 +446,10 @@
                                        ride.time = dateHour;
                                        ride.day = dateTime;
                                        ride.cost = myTrips_raw[a+6];
-                                       ride.seats = myTrips_raw[a+7];
-                                       ride.rideID = myTrips_raw[a+8];
+                                       ride.seats = myTrips_raw[a+8];
+                                       ride.rideID = myTrips_raw[a+9];
                                        ride.type = myTrips_raw[a+11];
-                                       ride.passengers = nil;
+                                       ride.passengers = myTrips_raw[a+10];
                                        NSDateFormatter *getDayName = [[NSDateFormatter alloc] init];
                                        NSDateFormatter *getDayNumber = [[NSDateFormatter alloc] init];
                                        NSDateFormatter *getDayMonth = [[NSDateFormatter alloc] init];
@@ -421,6 +467,215 @@
                                    
                                }}];
                                
+}
+
+
+-(void)getDirections{
+    if ((startItem) && (endItem)) {
+        // REQUEST DIRECTION
+        [havePoints invalidate];
+        MKDirections *directions = [[MKDirections alloc] initWithRequest:directionsRequest];
+        [directions calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse *response, NSError *error) {
+            // Now handle the result
+            if (error) {
+                NSLog(@"There was an error getting your directions");
+                return;
+            }
+            
+            // So there wasn't an error - let's plot those routes
+            [self plotRouteOnMap:[response.routes firstObject]];
+        }];
+        // REQUEST WEATHER
+        ForecastKit *forecast = [[ForecastKit alloc] initWithAPIKey:@"a9c6314513fed53054145f28852a3388"];
+        
+        [forecast getCurrentConditionsForLatitude:endPoint.coordinate.latitude longitude:endPoint.coordinate.longitude success:^(NSMutableDictionary *responseDict) {
+            
+            temperature = [[responseDict objectForKey:@"temperature"] intValue];
+            weatherInfo = [responseDict objectForKey:@"summary"];
+            weatherIcon = [responseDict objectForKey:@"icon"];
+            infoTemperature.text = [NSString stringWithFormat:@"%iº",temperature];
+            
+        } failure:^(NSError *error){
+            
+            NSLog(@"Currently %@", error.description);
+            
+        }];
+        
+    }
+}
+
+- (void)plotRouteOnMap:(MKRoute *)route
+{
+    
+    // Add it to the map
+    [routeView addOverlay:route.polyline];
+    pastOverlay = route;
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
+{
+    MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:overlay];
+    renderer.strokeColor = [[UIColor paperColorBlueA400] colorWithAlphaComponent:0.5];
+    renderer.lineWidth = 4.0;
+    MKCoordinateRegion region = [self regionForAnnotations:[routeView annotations]];
+    [routeView setRegion:region animated:YES];
+    return  renderer;
+}
+
+- (MKAnnotationView *) mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>) annotation
+{
+    MKPinAnnotationView *annView=[[MKPinAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:@"pin"];
+    if ([[annotation title] isEqualToString:@"End"]) {
+        annView.pinColor = MKPinAnnotationColorGreen;
+    } else {
+        annView.pinColor = MKPinAnnotationColorRed;
+    }
+    
+    return annView;
+}
+
+-(void)createAbbreviation:(NSString*)city label:(UILabel*)label{
+    NSArray *words = [city componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if ([words count] == 1) {
+        NSString *shortened =[words[0] substringToIndex:3];
+        label.text = [shortened uppercaseString];
+    } else if ([city isEqualToString:@"San Francisco"]) {
+        label.text = @"SFO";
+    }
+    else if ([words count] == 2) {
+        NSString *shortened = [NSString stringWithFormat:@"%@%@",[words[0] substringToIndex:1],[words[1] substringToIndex:1]];
+        label.text = [shortened uppercaseString];
+    } else {
+        NSString *shortened = [NSString stringWithFormat:@"%@%@%@",[words[0] substringToIndex:1],[words[1] substringToIndex:1],[words[2] substringToIndex:1]];
+        label.text = [shortened uppercaseString];
+    }
+    
+}
+
+- (MKCoordinateRegion)regionForAnnotations:(NSArray *)annotations
+{
+    MKCoordinateRegion region;
+    
+    if ([annotations count] == 0)
+    {
+        region = MKCoordinateRegionMakeWithDistance(routeView.userLocation.coordinate, 1000, 1000);
+    }
+    
+    else if ([annotations count] == 1)
+    {
+        id <MKAnnotation> annotation = [annotations lastObject];
+        region = MKCoordinateRegionMakeWithDistance(annotation.coordinate, 1000, 1000);
+    } else {
+        CLLocationCoordinate2D topLeftCoord;
+        topLeftCoord.latitude = -135;
+        topLeftCoord.longitude = 225;
+        
+        CLLocationCoordinate2D bottomRightCoord;
+        bottomRightCoord.latitude = 135;
+        bottomRightCoord.longitude = -225;
+        
+        for (id <MKAnnotation> annotation in annotations)
+        {
+            topLeftCoord.latitude = fmax(topLeftCoord.latitude, annotation.coordinate.latitude);
+            topLeftCoord.longitude = fmin(topLeftCoord.longitude, annotation.coordinate.longitude);
+            bottomRightCoord.latitude = fmin(bottomRightCoord.latitude, annotation.coordinate.latitude);
+            bottomRightCoord.longitude = fmax(bottomRightCoord.longitude, annotation.coordinate.longitude);
+        }
+        
+        const double extraSpace = 1.62;
+        region.center.latitude = topLeftCoord.latitude - (topLeftCoord.latitude - bottomRightCoord.latitude) / 2.0;
+        region.center.longitude = topLeftCoord.longitude - (topLeftCoord.longitude - bottomRightCoord.longitude) / 2.0;
+        region.span.latitudeDelta = fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * extraSpace;
+        region.span.longitudeDelta = fabs(topLeftCoord.longitude - bottomRightCoord.longitude) * extraSpace;
+    }
+    
+    return [routeView regionThatFits:region];
+}
+
+
+-(void)getTrip:(NSString*)queryNumber{
+    NSLog(@"ride id: %@",queryNumber);
+    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    request.HTTPMethod = @"POST";
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    // NSError *actualerror = [[NSError alloc] init];
+    // Parameters
+    NSDictionary *tmp = [[NSDictionary alloc] init];
+    tmp = @{
+            @"type"     : @"getRide",
+            @"ID" : queryNumber
+            };
+    
+    NSError *error;
+    NSData *postdata = [NSJSONSerialization dataWithJSONObject:tmp options:0 error:&error];
+    [request setHTTPBody:postdata];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response,
+                                               NSData *data,
+                                               NSError *error) {
+                               if (error) {
+                                   // Returned Error
+                                   NSLog(@"Unknown Error Occured");
+                               } else {
+                                   selectedTrip = [[rideObject alloc] init];
+                                   NSString *responseBody = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                                   info = [responseBody componentsSeparatedByString:@"~"];
+                                   tripfounder.text = info[0];
+                                   selectedTrip.cost =[NSString stringWithFormat:@"$%@",info[5]];
+                                   selectedTrip.rideID = queryNumber;
+                                   infoCost.text =[NSString stringWithFormat:@"$%@",info[5]];
+                                   double seconds = [info[4] doubleValue];
+                                   NSLog(@"%f",seconds);
+                                   NSTimeInterval timeInterval = (NSTimeInterval)seconds;
+                                   NSDate *date = [NSDate dateWithTimeIntervalSince1970:timeInterval];
+                                   NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                                   [formatter setDateFormat:@"LLL"];
+                                   NSString *dateText = [formatter stringFromDate:date];
+                                   [formatter setDateFormat:@"d"];
+                                   NSString *dateTime = [formatter stringFromDate:date];
+                                   [formatter setDateFormat:@"h:m a"];
+                                   NSString *dateHour = [formatter stringFromDate:date];
+                                   infoMonth.text = dateText;
+                                   selectedTrip.month = dateText;
+                                   selectedTrip.day = dateTime;
+                                   selectedTrip.time = dateHour;
+                                   infoMonth.text = dateText;
+                                   infoTime.text = dateHour;
+                                   infoDate.text = dateTime;
+                                   CLGeocoder* geocoder = [CLGeocoder new];
+                                   [geocoder geocodeAddressString:info[2]
+                                                completionHandler:^(NSArray* placemarks, NSError* error){
+                                                    CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                                                    [self createAbbreviation:placemark.locality label:infoFrom];
+                                                    startPoint = placemark.location;
+                                                    MKPlacemark *place = [[MKPlacemark alloc] initWithPlacemark:placemark];
+                                                    startItem = [[MKMapItem alloc]initWithPlacemark:place];
+                                                    [directionsRequest setSource:startItem];
+                                                    MKPointAnnotation *point = [[MKPointAnnotation alloc] init];
+                                                    point.coordinate = placemark.location.coordinate;
+                                                    point.title = @"Start";
+                                                    [routeView addAnnotation:point];
+                                                }];
+                                   CLGeocoder* geocoder2 = [CLGeocoder new];
+                                   [geocoder2 geocodeAddressString:info[3]
+                                                 completionHandler:^(NSArray* placemarks, NSError* error){
+                                                     CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                                                     [self createAbbreviation:placemark.locality label:infoTo];
+                                                     endPoint = placemark.location;
+                                                     MKPlacemark *place = [[MKPlacemark alloc] initWithPlacemark:placemark];
+                                                     endItem = [[MKMapItem alloc]initWithPlacemark:place];
+                                                     [directionsRequest setDestination:endItem];
+                                                     MKPointAnnotation *point = [[MKPointAnnotation alloc] init];
+                                                     point.coordinate = placemark.location.coordinate;
+                                                     point.title = @"End";
+                                                     [routeView addAnnotation:point];
+                                                 }];
+                                   
+                               }
+                           }];
 }
 
 

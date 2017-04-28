@@ -12,8 +12,13 @@
 #import "UIColor+BFPaperColors.h"
 #import "TripCollectionViewCell.h"
 #import "rideObject.h"
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
+#import "ForecastKit.h"
 
-@interface MessageViewController : UIViewController <UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UICollectionViewDataSource, UICollectionViewDelegate> {
+@interface MessageViewController : UIViewController <UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UICollectionViewDataSource, UICollectionViewDelegate, CLLocationManagerDelegate> {
+    int isPanel;
+    rideObject *selectedTrip;
     NSMutableArray *myTrips;
     int myRides;
     NSArray *myTrips_raw;
@@ -31,6 +36,35 @@
     __weak IBOutlet UIScrollView *conversationView;
     __weak IBOutlet UILabel *conversationOther;
     __weak IBOutlet UITextField *messageField;
+    __weak IBOutlet UIScrollView *tripView;
+    
+    
+    
+    // TRIP VIEW STUFF
+    int fromZip,toZip,seats,searchToZip,postalCode,cost;
+    NSString *fromCity, *toCity,*properTime,*applyRideID;
+    MKRoute *pastOverlay;
+    // Ride Info
+    MKDirectionsRequest *directionsRequest;
+    CLLocation *startPoint,*endPoint;
+    MKMapItem *startItem,*endItem;
+    NSArray *info;
+    int temperature;
+    NSString *weatherInfo,*weatherIcon;
+    NSTimer *havePoints;
+    NSString *rideNumber;
+    __weak IBOutlet UILabel *tripfounder;
+    __weak IBOutlet MKMapView *routeView;
+    __weak IBOutlet UILabel *routeCard;
+    __weak IBOutlet UILabel *infoFrom;
+    __weak IBOutlet UILabel *infoTo;
+    __weak IBOutlet UILabel *infoCost;
+    __weak IBOutlet UIButton *infoCar;
+    __weak IBOutlet UILabel *infoMonth;
+    __weak IBOutlet UILabel *infoDate;
+    __weak IBOutlet UILabel *infoTime;
+    __weak IBOutlet UILabel *infoTemperature;
+    NSString *rideDriver;
 }
 - (IBAction)Done:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *hideView;

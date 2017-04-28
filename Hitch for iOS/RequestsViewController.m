@@ -55,6 +55,7 @@
     [cell.confirm addTarget:self
                    action:@selector(confirmApplicant:)
          forControlEvents:UIControlEventTouchUpInside];
+    
     return cell;
 }
 
