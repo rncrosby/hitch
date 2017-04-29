@@ -542,6 +542,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    pullToScrollFirst = YES;
     [routeView removeAnnotations:routeView.annotations];
     startItem = nil;
     endItem = nil;
@@ -639,6 +640,7 @@
     }
 
 - (IBAction)startPost:(id)sender {
+        pullToScrollFirst = YES;
     table.userInteractionEnabled = NO;
     [References moveUp:postCardScroll yChange:667];
     /*
@@ -706,30 +708,6 @@
 - (IBAction)cancelRideView:(id)sender {
     table.userInteractionEnabled = YES;
     [References moveDown:routeCardScroll yChange:667];
-    /*
-     [References moveDown:requestcard yChange:667];
-     [References moveDown:requestFromLabel yChange:667];
-     [References moveDown:requestToLabel yChange:667];
-     [References moveDown:requestWhenLabel yChange:667];
-     [References moveDown:requestSeatsLabel yChange:667];
-     [References moveDown:requestFromField yChange:667];
-     [References moveDown:requestToField yChange:667];
-     [References moveDown:requestWhenField yChange:667];
-     [References moveDown:requestSeatsField yChange:667];
-     [References moveDown:postButton yChange:667];
-     [References moveDown:cancelButton yChange:667];
-     [References moveDown:costLabel yChange:667];
-     [References moveDown:incrementUp yChange:667];
-     [References moveDown:costCard yChange:667];
-     [References moveDown:incrementDown yChange:667];
-     
-     [References moveDown:tabBar yChange:550];
-     [References moveDown:aroundMe yChange:550];
-     [References moveDown:Me yChange:550];
-     [References moveDown:postRide yChange:550];
-     [References moveDown:line yChange:550];
-     */
-    // fade stuff
     [References fade:table alpha:1];
     postRide.userInteractionEnabled = YES;
     Me.userInteractionEnabled = YES;
@@ -1014,7 +992,6 @@ typedef void(^addressCompletion)(NSString *);
     [UIView animateWithDuration:0.8 animations:^{
         [self setNeedsStatusBarAppearanceUpdate];
     }];
-
 }
 
 -(void)getDirections{
@@ -1216,6 +1193,47 @@ typedef void(^addressCompletion)(NSString *);
                                    
                                }
                            }];
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    float scrollOffsetY = scrollView.contentOffset.y;
+    NSLog(@"%f",scrollOffsetY);
+    if((scrollOffsetY <= -100) && (pullToScrollFirst == YES))
+    {
+        if (routeCardScroll.frame.origin.y == 0) {
+            pullToScrollFirst = NO;
+            table.userInteractionEnabled = YES;
+            [References moveDown:routeCardScroll yChange:667];
+            [References fade:table alpha:1];
+            postRide.userInteractionEnabled = YES;
+            Me.userInteractionEnabled = YES;
+            aroundMe.userInteractionEnabled = YES;
+            [References fade:destinationfield alpha:1];
+            [References fade:startfield alpha:1];
+            [References fade:aroundMe alpha:1];
+            [References fade:Me alpha:1];
+            [References fade:postRide alpha:1];
+            [References fadeOut:blackOverView];
+            [References fadeColor:aroundMe color:[UIColor blackColor]];
+            [References fadeColor:postRide color:[UIColor clearColor]];
+            [References fadeButtonTextColor:aroundMe color:[UIColor whiteColor]];
+            [References fadeButtonTextColor:postRide color:[UIColor blackColor]];
+            
+            // deactivate stuff
+            destinationfield.userInteractionEnabled = YES;
+            startfield.userInteractionEnabled = YES;
+            statusBarLight = NO;
+            [UIView animateWithDuration:0.8 animations:^{
+                [self setNeedsStatusBarAppearanceUpdate];
+            }];
+            [routeView removeOverlay:pastOverlay.polyline];
+            [routeView removeAnnotations:routeView.annotations];
+        } else if (postCardScroll.frame.origin.y == 0) {
+            pullToScrollFirst = NO;
+            [self postDone];
+        }
+    }
 }
 
 

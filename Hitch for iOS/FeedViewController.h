@@ -39,7 +39,7 @@
     _Bool areoff;
     CGPoint lastContentOffset;
     UIView *line,*line2;
-    
+    _Bool pullToScrollFirst;
     
     // VIEWS
     __weak IBOutlet UILabel *menuBar;
@@ -84,6 +84,7 @@
     NSString *weatherInfo,*weatherIcon;
     NSTimer *havePoints;
     NSString *rideNumber;
+    int currentpanel;
     __weak IBOutlet MKMapView *routeView;
     __weak IBOutlet UIScrollView *routeCardScroll;
     __weak IBOutlet UILabel *routeCard;

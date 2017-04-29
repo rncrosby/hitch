@@ -26,6 +26,7 @@
     NSMutableArray *arrayOfTripMessages;
     UIView *line,*line2,*line3;
     BOOL statusBarLight;
+    bool pulltoscroll;
     __weak IBOutlet UILabel *tabBar;
     __weak IBOutlet UIButton *Done;
     __weak IBOutlet UILabel *menuBar;

@@ -56,18 +56,31 @@
 }
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
-    [References moveUp:_hideView yChange:225];
-    [References moveUp:messageField yChange:225];
-    conversationView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]-225);
+    if (isPanel == 1) {
+        [References moveUp:_hideView yChange:225];
+        [References moveUp:messageField yChange:225];
+        conversationView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]-225);
+    } else if (isPanel == 2) {
+        [References moveUp:_hideView yChange:225];
+        [References moveUp:messageField yChange:225];
+        tripView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]-225);
+    }
     return YES;
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [References moveDown:_hideView yChange:225];
-    [References moveDown:messageField yChange:225];
-    conversationView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]);
-    [textField resignFirstResponder];
-    [self sendMessage:conversationOther.text message:textField.text];
+    if (isPanel == 1) {
+        [References moveDown:_hideView yChange:225];
+        [References moveDown:messageField yChange:225];
+        conversationView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]);
+        [textField resignFirstResponder];
+        [self sendMessage:conversationOther.text message:textField.text];
+    } else if (isPanel == 2) {
+        [References moveDown:_hideView yChange:225];
+        [References moveDown:messageField yChange:225];
+        tripView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]);
+        [textField resignFirstResponder];
+    }
     return YES;
 }
 
@@ -110,6 +123,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    pulltoscroll = YES;
     isPanel = 1;
     NSArray *tempConversations = [conversations[indexPath.row] componentsSeparatedByString:@":"];
     [self getConversation:tempConversations[0] personB:tempConversations[1]];
@@ -598,6 +612,7 @@
 
 
 -(void)getTrip:(NSString*)queryNumber{
+    pulltoscroll = YES;
     NSLog(@"ride id: %@",queryNumber);
     NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
@@ -733,6 +748,36 @@
                                    
                                }
                            }];
+}
+
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    float scrollOffsetY = scrollView.contentOffset.y;
+    if((scrollOffsetY <= -100) && (pulltoscroll == YES))
+    {
+        pulltoscroll = NO;
+        [References fadeOut:blackOverView];
+        if (isPanel == 1) {
+            [References moveDown:conversationView yChange:667];
+            for (int x = 0; x<=arrayOfMessages.count-1; x++) {
+                [arrayOfMessages[x] removeFromSuperview];
+            }
+        } else if (isPanel == 2) {
+            [References moveDown:tripView yChange:1334];
+            for (int x = 0; x<=arrayOfTripMessages.count-1; x++) {
+                [arrayOfTripMessages[x] removeFromSuperview];
+            }
+        }
+        [References moveDown:messageField yChange:667];
+        [References moveDown:_hideView yChange:667];
+        [messageField setText:@""];
+        statusBarLight = NO;
+        [UIView animateWithDuration:0.8 animations:^{
+            [self setNeedsStatusBarAppearanceUpdate];
+        }];
+
+            }
 }
 
 
