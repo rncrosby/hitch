@@ -40,6 +40,7 @@
     __weak IBOutlet UITextField *messageField;
     __weak IBOutlet UIScrollView *tripView;
     
+    __weak IBOutlet UIScrollView *tripDetailView;
     
     
     // TRIP VIEW STUFF

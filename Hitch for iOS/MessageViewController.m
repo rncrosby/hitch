@@ -34,6 +34,8 @@
     [References cornerRadius:infoTime radius:5.0f];
     [References cornerRadius:infoTemperature radius:5.0f];
     [super viewDidLoad];
+    tripDetailView.contentSize = CGSizeMake(750, 223);
+    [tripDetailView setContentSize:CGSizeMake(750, 223)];
     [self getAllMessages];
     [self getRide];
     // Do any additional setup after loading the view.
