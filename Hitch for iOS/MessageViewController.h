@@ -41,6 +41,7 @@
     __weak IBOutlet UIScrollView *tripView;
     
     __weak IBOutlet UIScrollView *tripDetailView;
+    __weak IBOutlet UIScrollView *tripPeopleView;
     
     
     // TRIP VIEW STUFF

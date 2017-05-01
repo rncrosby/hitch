@@ -641,6 +641,20 @@
                                    // Returned Error
                                    NSLog(@"Unknown Error Occured");
                                } else {
+                                   UILabel *imageLabel = [self.view viewWithTag:51];
+                                   UILabel *driverLabel = [self.view viewWithTag:52];
+                                   UILabel *typeLabel = [self.view viewWithTag:53];
+                                   for (int a = 1; a < 10; a++) {
+                                       int distancetomove = 200 * a;
+                                       UILabel *newimglabel = imageLabel;
+                                       newimglabel.frame = CGRectMake(newimglabel.frame.origin.x + distancetomove, newimglabel.frame.origin.y, newimglabel.frame.size.width, newimglabel.frame.size.height);
+                                       UILabel *newdrilabel = driverLabel;
+                                       newdrilabel.frame = CGRectMake(newdrilabel.frame.origin.x +distancetomove, newdrilabel.frame.origin.y, newdrilabel.frame.size.width, newdrilabel.frame.size.height);
+                                       UILabel *newdrilabel = driverLabel;
+                                       newdrilabel.frame = CGRectMake(newdrilabel.frame.origin.x +distancetomove, newdrilabel.frame.origin.y, newdrilabel.frame.size.width, newdrilabel.frame.size.height);
+                                   }
+                                   tripPeopleView.contentSize = CGSizeMake(750, 47);
+                                   
                                    selectedTrip = [[rideObject alloc] init];
                                    NSString *responseBody = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                                    info = [responseBody componentsSeparatedByString:@"~"];
