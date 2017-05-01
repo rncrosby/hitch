@@ -78,6 +78,8 @@
         [textField resignFirstResponder];
         [self sendMessage:conversationOther.text message:textField.text];
     } else if (isPanel == 2) {
+        // SEND GROUP MESSAGE
+        [self sendGroupMessage:textField.text];
         [References moveDown:_hideView yChange:225];
         [References moveDown:messageField yChange:225];
         tripView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]);
@@ -641,24 +643,35 @@
                                    // Returned Error
                                    NSLog(@"Unknown Error Occured");
                                } else {
-                                   UILabel *imageLabel = [self.view viewWithTag:51];
-                                   UILabel *driverLabel = [self.view viewWithTag:52];
+                                   UIButton *imageLabel = [self.view viewWithTag:51];
+                                   UILabel *namelabel = [self.view viewWithTag:52];
                                    UILabel *typeLabel = [self.view viewWithTag:53];
-                                   for (int a = 1; a < 10; a++) {
+                                   int ridersCount = 4 + 1;
+                                   for (int a = 1; a < ridersCount; a++) {
                                        int distancetomove = 200 * a;
-                                       UILabel *newimglabel = imageLabel;
-                                       newimglabel.frame = CGRectMake(newimglabel.frame.origin.x + distancetomove, newimglabel.frame.origin.y, newimglabel.frame.size.width, newimglabel.frame.size.height);
-                                       UILabel *newdrilabel = driverLabel;
-                                       newdrilabel.frame = CGRectMake(newdrilabel.frame.origin.x +distancetomove, newdrilabel.frame.origin.y, newdrilabel.frame.size.width, newdrilabel.frame.size.height);
-                                       UILabel *newdrilabel = driverLabel;
-                                       newdrilabel.frame = CGRectMake(newdrilabel.frame.origin.x +distancetomove, newdrilabel.frame.origin.y, newdrilabel.frame.size.width, newdrilabel.frame.size.height);
+                                       UIButton *newImageLabel = [[UIButton alloc] initWithFrame:CGRectMake(imageLabel.frame.origin.x + distancetomove, imageLabel.frame.origin.y, imageLabel.frame.size.width, imageLabel.frame.size.height)];
+                                       [newImageLabel setBackgroundColor:[UIColor whiteColor]];
+                                       [References cornerRadius:newImageLabel radius:newImageLabel.frame.size.width/2];
+                                       UILabel *newNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(namelabel.frame.origin.x + distancetomove, namelabel.frame.origin.y, namelabel.frame.size.width, namelabel.frame.size.height)];
+                                       [newNameLabel setFont:namelabel.font];
+                                       [newNameLabel setText:@"Test Name"];
+                                       [newNameLabel setTextColor:[UIColor whiteColor]];
+                                       UILabel *mewTypeLabel = [[UILabel alloc] initWithFrame:CGRectMake(typeLabel.frame.origin.x + distancetomove, typeLabel.frame.origin.y, typeLabel.frame.size.width, typeLabel.frame.size.height)];
+                                       [mewTypeLabel setFont:typeLabel.font];
+                                       [mewTypeLabel setText:@"Passenger"];
+                                       [mewTypeLabel setTextColor:[UIColor whiteColor]];
+                                    [tripPeopleView addSubview:newImageLabel];
+                                    [tripPeopleView addSubview:newNameLabel];
+                                    [tripPeopleView addSubview:mewTypeLabel];
                                    }
-                                   tripPeopleView.contentSize = CGSizeMake(750, 47);
+                                   int frameSize = 200 * ridersCount;
+                                   tripPeopleView.contentSize = CGSizeMake(frameSize, 47);
                                    
                                    selectedTrip = [[rideObject alloc] init];
                                    NSString *responseBody = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                                    info = [responseBody componentsSeparatedByString:@"~"];
-                                   tripfounder.text = info[0];
+                                   tripfounder.text = @"Test Name";//info[0];
+                                   [References cornerRadius:imageLabel radius:imageLabel.frame.size.width/2];
                                    selectedTrip.cost =[NSString stringWithFormat:@"$%@",info[5]];
                                    selectedTrip.rideID = queryNumber;
                                    infoCost.text =[NSString stringWithFormat:@"$%@",info[5]];
@@ -731,7 +744,7 @@
                                        [References cornerRadius:messageText radius:5.0f];
                                        [tripView addSubview:messageText];
                                    }
-                                   tripView.contentSize = CGSizeMake([References screenWidth], tripView.frame.size.height + messagesHeight);
+                                   tripView.contentSize = CGSizeMake([References screenWidth], tripView.frame.size.height + messagesHeight - 50);
                                    // directions part
                                    CLGeocoder* geocoder = [CLGeocoder new];
                                    [geocoder geocodeAddressString:info[2]
@@ -764,6 +777,93 @@
                                    
                                }
                            }];
+}
+
+-(void)sendGroupMessage:(NSString*)message{
+    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    request.HTTPMethod = @"POST";
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    // NSError *actualerror = [[NSError alloc] init];
+    // Parameters
+    NSDictionary *tmp = [[NSDictionary alloc] init];
+    tmp = @{
+            @"type"     : @"sendGroupMessage",
+            @"rideID" : [selectedTrip valueForKey:@"rideID"],
+            @"sender" : [[NSUserDefaults standardUserDefaults] objectForKey:@"user"],
+            @"message" : message
+            };
+    NSError *error;
+    NSData *postdata = [NSJSONSerialization dataWithJSONObject:tmp options:0 error:&error];
+    [request setHTTPBody:postdata];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response,
+                                               NSData *data,
+                                               NSError *error) {
+                               if (error) {
+                                   // Returned Error
+                                   NSLog(@"Unknown Error Occured");
+                               } else {
+                                   NSString *responseBody = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                                   for (int a = 0; a <arrayOfTripMessages.count; a++) {
+                                       [arrayOfTripMessages[a] removeFromSuperview];
+                                   }
+                                   NSArray *ridemessages = [responseBody componentsSeparatedByString:@"%"];
+                                   selectedTrip.messages = ridemessages;
+                                   int messagesHeight = 0;
+                                   // messages part
+                                   int startY = messageHeader.frame.origin.y + messageHeader.frame.size.height;
+                                   for (int x = 0; x<ridemessages.count-1; x++) {
+                                       NSArray *message = [ridemessages[x] componentsSeparatedByString:@"&&"];
+                                       NSString *messageData = message[0];
+                                       NSString *sender = message[1];
+                                       
+                                       
+                                       int lineHeight = 25;
+                                       int lineCount = 1;
+                                       if (messageData.length > 25) {
+                                           lineCount = 2;
+                                           if (messageData.length > 50) {
+                                               lineCount = 3;
+                                           }
+                                       }
+                                       int bubbleSize = lineCount * lineHeight;
+                                       UILabel *messageText = [[UILabel alloc] initWithFrame:CGRectMake(16, startY, [References screenWidth]-32,bubbleSize+6)];
+                                       startY = messageText.frame.origin.y+15+bubbleSize;
+                                       [messageText setNumberOfLines:lineCount];
+                                       NSMutableParagraphStyle *style =  [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+                                       style.alignment = NSTextAlignmentJustified;
+                                       style.firstLineHeadIndent = 10.0f;
+                                       style.headIndent = 10.0f;
+                                       style.tailIndent = -10.0f;
+                                       
+                                       NSAttributedString *attrText = [[NSAttributedString alloc] initWithString:messageData attributes:@{ NSParagraphStyleAttributeName : style}];
+                                       
+                                       messageText.attributedText = attrText;
+                                       
+                                       [messageText setFont:[UIFont boldSystemFontOfSize:20.0f]];
+                                       if ([sender isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"user"]]) {
+                                           [messageText setBackgroundColor:[UIColor paperColorBlueA400]];
+                                           [messageText setTextColor:[UIColor whiteColor]];
+                                       } else {
+                                           [messageText setBackgroundColor:[UIColor paperColorGray100]];
+                                           [messageText setTextColor:[UIColor blackColor]];
+                                       }
+                                       if (x > 1) {
+                                           messagesHeight = messagesHeight + (int)messageText.frame.size.height;
+                                       }
+                                       [arrayOfTripMessages addObject:messageText];
+                                       [References cornerRadius:messageText radius:5.0f];
+                                       [tripView addSubview:messageText];
+                                   }
+                                   tripView.contentSize = CGSizeMake([References screenWidth], tripView.frame.size.height + messagesHeight - 50);
+                                   [messageField setText:@""];
+                                   [messageField setPlaceholder:@"Message Sent!"];
+                               }
+                           }];
+    
 }
 
 

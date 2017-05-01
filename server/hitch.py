@@ -207,6 +207,20 @@ def index():
         else:
             print 'Error'
             return 'Error'
+    # SEND GROUP MESSAGE
+    if accesstype == 'sendGroupMessage':
+        sender = json['sender']
+        rideID = json['rideID']
+        message = json['message']
+        ridedb = TinyDB('rides.json')
+        Search = Query()
+        returneddata = ridedb.search(Search.id == rideID)
+        rideObject = returneddata[0]
+        messages = rideObject['messages']
+        messages = messages + message + '&&' + sender + '%'
+        ridedb.update({'messages': messages}, Search.id == rideID)
+        print 'Success: Message Sent'
+        return messages
     # SEARCH MY RIDES
     if accesstype == 'myTrips':
         returnObjects = ''
