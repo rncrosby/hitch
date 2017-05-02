@@ -872,6 +872,7 @@
     float scrollOffsetY = scrollView.contentOffset.y;
     if((scrollOffsetY <= -100) && (pulltoscroll == YES))
     {
+        [messageField setPlaceholder:@"Message"];
         pulltoscroll = NO;
         [References fadeOut:blackOverView];
         if (isPanel == 1) {

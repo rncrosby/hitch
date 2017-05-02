@@ -11,6 +11,7 @@
 		AD1546821DFB965D00520267 /* MessagesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD1546801DFB965D00520267 /* MessagesTableViewCell.m */; };
 		AD1546831DFB965D00520267 /* MessagesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD1546811DFB965D00520267 /* MessagesTableViewCell.xib */; };
 		AD2A64171DF21341009FD1B5 /* Back.png in Resources */ = {isa = PBXBuildFile; fileRef = AD2A64161DF21341009FD1B5 /* Back.png */; };
+		AD4EC2051EB80AA600EEA132 /* NotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = AD4EC2041EB80AA600EEA132 /* NotificationView.m */; };
 		AD6357091EB1797C003796EF /* passenger.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AD6357081EB1797C003796EF /* passenger.jpg */; };
 		AD7403F71DDE8D9600B59A36 /* testImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AD7403F61DDE8D9600B59A36 /* testImage.jpg */; };
 		AD74115D1DF5735F006CD907 /* ForecastKit.m in Sources */ = {isa = PBXBuildFile; fileRef = AD74115C1DF5735F006CD907 /* ForecastKit.m */; };
@@ -86,6 +87,8 @@
 		AD1546801DFB965D00520267 /* MessagesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesTableViewCell.m; sourceTree = "<group>"; };
 		AD1546811DFB965D00520267 /* MessagesTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MessagesTableViewCell.xib; sourceTree = "<group>"; };
 		AD2A64161DF21341009FD1B5 /* Back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Back.png; sourceTree = "<group>"; };
+		AD4EC2031EB80AA600EEA132 /* NotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationView.h; sourceTree = "<group>"; };
+		AD4EC2041EB80AA600EEA132 /* NotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationView.m; sourceTree = "<group>"; };
 		AD6357081EB1797C003796EF /* passenger.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = passenger.jpg; sourceTree = "<group>"; };
 		AD7403F61DDE8D9600B59A36 /* testImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = testImage.jpg; sourceTree = "<group>"; };
 		AD74115B1DF5735F006CD907 /* ForecastKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForecastKit.h; sourceTree = "<group>"; };
@@ -282,6 +285,8 @@
 				AD7B4D051EB1B843002CD33F /* RequestTableViewCell.h */,
 				AD7B4D061EB1B843002CD33F /* RequestTableViewCell.m */,
 				AD7B4D071EB1B843002CD33F /* RequestTableViewCell.xib */,
+				AD4EC2031EB80AA600EEA132 /* NotificationView.h */,
+				AD4EC2041EB80AA600EEA132 /* NotificationView.m */,
 			);
 			path = "Hitch for iOS";
 			sourceTree = "<group>";
@@ -509,6 +514,7 @@
 				AD7411781DF5740C006CD907 /* AFURLConnectionOperation.m in Sources */,
 				AD7B4D081EB1B843002CD33F /* RequestTableViewCell.m in Sources */,
 				AD7411761DF5740C006CD907 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				AD4EC2051EB80AA600EEA132 /* NotificationView.m in Sources */,
 				AD15467E1DFB900F00520267 /* MessageViewController.m in Sources */,
 				ADE6BEA01DDF8BE6004F3F8E /* FeedTableViewCell.m in Sources */,
 				ADA113471DDC1CAB00BE4980 /* FeedViewController.m in Sources */,
