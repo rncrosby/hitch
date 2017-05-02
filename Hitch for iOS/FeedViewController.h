@@ -17,7 +17,7 @@
 #import "MMMaterialDesignSpinner.h"
 #import "UIColor+BFPaperColors.h"
 #import "ForecastKit.h"
-
+#import "NotificationView.h"
 
 @interface FeedViewController : UIViewController <UIActionSheetDelegate,UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,CLLocationManagerDelegate,UIPickerViewDelegate> {
     BOOL statusBarLight;
@@ -101,7 +101,8 @@
     NSString *rideDriver;
     __weak IBOutlet UIView *messagesView;
     __weak IBOutlet UIButton *rideConfirm;
-    
+    UIView *notfication;
+    NSTimer *notificationTimer;
 }
 - (IBAction)aroundMe:(id)sender;
 - (IBAction)showMessages:(id)sender;

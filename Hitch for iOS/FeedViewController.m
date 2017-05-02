@@ -84,7 +84,7 @@
     [References cornerRadius:sendButton radius:5.0f];
     [References cornerRadius:rideConfirm radius:5.0f];
     [References textFieldInset:messageBox];
-}
+    }
 
 -(void)updateCost:(NSString*)how {
     if ([how isEqualToString:@"up"]) {
@@ -896,11 +896,24 @@ typedef void(^addressCompletion)(NSString *);
                                    
                                } else {
                                    [self postDone];
-                                   [RKDropdownAlert title:@"Thanks For Posting!" message:@"You'll be notified whenever someone is interested in your ride" backgroundColor:[UIColor paperColorGreen]textColor:[UIColor whiteColor] time:3];
+                                   notfication = [NotificationView newView:@"Ride Posted" description:@"Thanks for using Hitch!"];
+                                   [self.view addSubview:notfication];
+                                   [self.view bringSubviewToFront:notfication];
+                                   [References fromoffscreen:notfication where:@"TOP"];
+                                   notificationTimer = [NSTimer scheduledTimerWithTimeInterval:2.0
+                                                                    target:self
+                                                                  selector:@selector(hideNotification)
+                                                                  userInfo:nil
+                                                                   repeats:NO];
                                    [self queryRide];
                                }
                            }];
     }
+}
+
+-(void)hideNotification {
+    [References justMoveOffScreen:notfication where:@"TOP"];
+    [notificationTimer invalidate];
 }
 
 -(void)queryRide{

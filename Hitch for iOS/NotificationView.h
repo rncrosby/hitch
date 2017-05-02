@@ -6,8 +6,16 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <CoreGraphics/CoreGraphics.h>
+#import <QuartzCore/QuartzCore.h>
+#import "UIColor+BFPaperColors.h"
+#import "References.h"
 
-@interface NotificationView : UIView
 
+@interface NotificationView : NSObject
+
++(UIView*)newView:(NSString*)title description:(NSString*)description;
++(CGFloat)screenWidth;
 @end
