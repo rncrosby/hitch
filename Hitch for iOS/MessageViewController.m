@@ -882,9 +882,12 @@
             }
         } else if (isPanel == 2) {
             [References moveDown:tripView yChange:1334];
-            for (int x = 0; x<=arrayOfTripMessages.count-1; x++) {
-                [arrayOfTripMessages[x] removeFromSuperview];
+            if (arrayOfTripMessages.count > 0) {
+                for (int x = 0; x<=arrayOfTripMessages.count-1; x++) {
+                    [arrayOfTripMessages[x] removeFromSuperview];
+                }
             }
+
         }
         [References moveDown:messageField yChange:667];
         [References moveDown:_hideView yChange:667];
