@@ -10,9 +10,9 @@
 
 @implementation NotificationView
 
-+(UIView*)newView:(NSString*)title description:(NSString*)description{
++(UIView*)newView:(NSString*)title description:(NSString*)description backgroundColor:(UIColor*)backgroundColor{
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(16, 26, [self screenWidth]-32, 50)];
-    [view setBackgroundColor:[UIColor paperColorYellowA400]];
+    [view setBackgroundColor:backgroundColor];
     [self cornerRadius:view radius:5.0f];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 3, [self screenWidth]-32, 30)];
     [titleLabel setFont:[UIFont boldSystemFontOfSize:26]];

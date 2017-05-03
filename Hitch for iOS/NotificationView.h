@@ -16,6 +16,6 @@
 
 @interface NotificationView : NSObject
 
-+(UIView*)newView:(NSString*)title description:(NSString*)description;
++(UIView*)newView:(NSString*)title description:(NSString*)description backgroundColor:(UIColor*)backgroundColor;
 +(CGFloat)screenWidth;
 @end

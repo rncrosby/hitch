@@ -168,11 +168,9 @@
     [cell.driverpic setImage:[UIImage imageNamed:@"driver.jpg"]];
     [References cornerRadius:cell.driverpic radius:cell.driverpic.frame.size.width/2];
     rideObject *ride = myTrips[indexPath.row];
-    cell.plaintext.text = [ride valueForKey:@"fullText"];
+    cell.plaintext.text = [ride valueForKey:@"text"];
     cell.drivername.text = [ride valueForKey:@"founder"];
-    [References cornerRadius:cell.passenger1 radius:cell.passenger1.frame.size.height/2];
-    [References cornerRadius:cell.passenger2 radius:cell.passenger2.frame.size.height/2];
-    [References cornerRadius:cell.passenger3 radius:cell.passenger3.frame.size.height/2];
+    cell.dateInfo.text = [ride valueForKey:@"fullText"];
     if ([[ride valueForKey:@"type"] isEqualToString:@"PENDING"]) {
         [cell.card setBackgroundColor:[References colorFromHexString:@"#FEC432"]];
         [cell.plaintext setTextColor:[[UIColor blackColor]colorWithAlphaComponent:0.2f]];
@@ -453,38 +451,15 @@
                                        ride.founder = myTrips_raw[a+1];
                                        ride.text = myTrips_raw[a+2];
                                        ride.from = myTrips_raw[a+3];
-                                       ride.to = myTrips_raw[a+4];
-                                       double seconds = [myTrips_raw[a+5] doubleValue];
-                                       NSTimeInterval timeInterval = (NSTimeInterval)seconds;
-                                       NSDate *rideDate = [NSDate dateWithTimeIntervalSince1970:timeInterval];
-                                       NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                                       [formatter setDateFormat:@"LLL"];
-                                       NSString *dateText = [formatter stringFromDate:rideDate];
-                                       [formatter setDateFormat:@"d"];
-                                       NSString *dateTime = [formatter stringFromDate:rideDate];
-                                       [formatter setDateFormat:@"h:m a"];
-                                       NSString *dateHour = [formatter stringFromDate:rideDate];
-                                       ride.month = dateText;
-                                       ride.time = dateHour;
-                                       ride.day = dateTime;
-                                       ride.cost = myTrips_raw[a+6];
                                        ride.seats = myTrips_raw[a+8];
                                        ride.rideID = myTrips_raw[a+9];
                                        ride.type = myTrips_raw[a+11];
                                        ride.passengers = myTrips_raw[a+10];
-                                       NSDateFormatter *getDayName = [[NSDateFormatter alloc] init];
-                                       NSDateFormatter *getDayNumber = [[NSDateFormatter alloc] init];
-                                       NSDateFormatter *getDayMonth = [[NSDateFormatter alloc] init];
-                                       NSDateFormatter *getDayTime = [[NSDateFormatter alloc] init];
-                                       NSDateFormatter *getDayPeriod = [[NSDateFormatter alloc] init];
-                                       [getDayName setDateFormat:@"eee"];
-                                       [getDayNumber setDateFormat:@"d"];
-                                       [getDayMonth setDateFormat:@"MMM"];
-                                       [getDayTime setDateFormat:@"h"];
-                                       [getDayPeriod setDateFormat:@"a"];
-                                       ride.fullText = [NSString stringWithFormat:@"%@, %@ %@ around %@ %@",[getDayName stringFromDate:rideDate],[getDayMonth stringFromDate:rideDate],[getDayNumber stringFromDate:rideDate],[getDayTime stringFromDate:rideDate],[getDayPeriod stringFromDate:rideDate]];
+                                       ride.fullText =myTrips_raw[a+3];
                                        [myTrips addObject:ride];
+                                       a = 12;
                                        [tripcollection reloadData];
+                                       
                                    }
                                    
                                }}];
@@ -882,6 +857,8 @@
             }
         } else if (isPanel == 2) {
             [References moveDown:tripView yChange:1334];
+            [routeView removeOverlay:pastOverlay.polyline];
+            [routeView removeAnnotations:routeView.annotations];
             if (arrayOfTripMessages.count > 0) {
                 for (int x = 0; x<=arrayOfTripMessages.count-1; x++) {
                     [arrayOfTripMessages[x] removeFromSuperview];

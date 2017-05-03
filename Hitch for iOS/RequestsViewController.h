@@ -10,6 +10,7 @@
 #import "RequestTableViewCell.h"
 #import "References.h"
 #import "rideObject.h"
+#import "NotificationView.h"
 
 @interface RequestsViewController : UIViewController <UITableViewDelegate,UITableViewDataSource> {
     NSArray *myRequests_raw;
@@ -17,6 +18,8 @@
     int myRequestsCount;
     UIView *line,*line2;
     __weak IBOutlet UILabel *menuBar;
+    UIView *notfication;
+    NSTimer *notificationTimer;
 }
 @property (weak, nonatomic) IBOutlet UITableView *table;
 - (IBAction)done:(id)sender;

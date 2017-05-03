@@ -15,7 +15,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *driverpic;
 @property (weak, nonatomic) IBOutlet UILabel *plaintext;
 @property (weak, nonatomic) IBOutlet UILabel *drivername;
-@property (weak, nonatomic) IBOutlet UIImageView *passenger1;
-@property (weak, nonatomic) IBOutlet UIImageView *passenger2;
-@property (weak, nonatomic) IBOutlet UIImageView *passenger3;
+@property (weak, nonatomic) IBOutlet UILabel *dateInfo;
+
 @end

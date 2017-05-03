@@ -154,8 +154,28 @@
                                    NSLog(@"Unknown Error Occured");
                                } else {
                                    if (myRequestsCount == 1) {
-                                       [self dismissViewControllerAnimated:YES completion:nil];
+                                       notfication = [NotificationView newView:@"Ride Confirmed" description:@"The passenger has been notified" backgroundColor:[UIColor paperColorLightGreenA400]];
+                                       [self.view addSubview:notfication];
+                                       [self.view bringSubviewToFront:notfication];
+                                       [References fromoffscreen:notfication where:@"TOP"];
+                                       notificationTimer = [NSTimer scheduledTimerWithTimeInterval:2.0
+                                                                                            target:self
+                                                                                          selector:@selector(hideNotification)
+                                                                                          userInfo:nil
+                                                                                           repeats:NO];
+
+
                                    } else {
+                                       notfication = [NotificationView newView:@"Ride Confirmed" description:@"The passenger has been notified" backgroundColor:[UIColor paperColorLightGreenA400]];
+                                       [self.view addSubview:notfication];
+                                       [self.view bringSubviewToFront:notfication];
+                                       [References fromoffscreen:notfication where:@"TOP"];
+                                       notificationTimer = [NSTimer scheduledTimerWithTimeInterval:2.0
+                                                                                            target:self
+                                                                                          selector:@selector(hideNotification)
+                                                                                          userInfo:nil
+                                                                                           repeats:NO];
+
                                        [self getRide];
                                    }
                                    
@@ -164,4 +184,10 @@
                                }}];
 
 }
+
+-(void)hideNotification {
+    [References justMoveOffScreen:notfication where:@"TOP"];
+    [notificationTimer invalidate];
+}
+
 @end

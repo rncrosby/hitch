@@ -896,7 +896,7 @@ typedef void(^addressCompletion)(NSString *);
                                    
                                } else {
                                    [self postDone];
-                                   notfication = [NotificationView newView:@"Ride Posted" description:@"Thanks for using Hitch!"];
+                                   notfication = [NotificationView newView:@"Ride Posted" description:@"Thanks for using Hitch!" backgroundColor:[UIColor paperColorYellowA400]];
                                    [self.view addSubview:notfication];
                                    [self.view bringSubviewToFront:notfication];
                                    [References fromoffscreen:notfication where:@"TOP"];

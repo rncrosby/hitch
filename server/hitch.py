@@ -182,6 +182,18 @@ def index():
         else:
             print 'Error'
             return 'Error'
+    # TEST GET RIDE RETURNS ACTUAL OBJECT
+    if accesstype == 'getRideObject':
+        ridedb = TinyDB('rides.json')
+        rideID = json['ID']
+        Search = Query()
+        returneddata = ridedb.search(Search.id == rideID)
+        if returneddata != 0:
+            return returneddata
+            print 'Ride Returned'
+        else:
+            print 'Error'
+            return 'Error'
     # GET TRIP
     if accesstype == 'getTripPage':
         ridedb = TinyDB('rides.json')

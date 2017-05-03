@@ -70,11 +70,11 @@
                     forKeyPath:@"_placeholderLabel.textColor"];
     [References textFieldInset:emailfield];
     [References textFieldInset:passwordfield];
-    // AUTO SIGN IN
+//    AUTO SIGN IN
     [emailfield setText:@"rob"];
     [passwordfield setText:@"pass"];
     [self signin:nil];
-   }
+}
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
     AVPlayerItem *p = [notification object];
