@@ -270,7 +270,7 @@
 }
              
 -(void)sendMessage:(NSString*)driver message:(NSString*)message{
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -456,7 +456,7 @@
 -(void)uploadImage{
     UIImage * myImage = [UIImage imageNamed: @"testImage.jpg"];
     NSString *imageString = [UIImagePNGRepresentation(myImage) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -735,7 +735,7 @@
 }
 
 -(void)checkApply{
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -776,7 +776,7 @@
 }
 
 - (IBAction)rideConfirm:(id)sender {
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -863,7 +863,7 @@ typedef void(^addressCompletion)(NSString *);
     } else {
     NSTimeInterval seconds = [rideDateChosen timeIntervalSince1970];
     NSInteger time = round(seconds);
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -917,7 +917,7 @@ typedef void(^addressCompletion)(NSString *);
 }
 
 -(void)queryRide{
-        NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+        NSURL *url = [NSURL URLWithString:[References backendAddress]];
         NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
         request.HTTPMethod = @"POST";
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -1131,7 +1131,7 @@ typedef void(^addressCompletion)(NSString *);
 
 -(void)getRide:(NSString*)queryNumber{
     
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];

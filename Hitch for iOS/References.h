@@ -13,7 +13,7 @@
     NSMutableData *_responseData;
     NSString *result;
 }
-
++(NSString *)backendAddress;
 +(UIColor *)colorFromHexString:(NSString *)hexString;
 +(CGFloat)screenWidth;
 +(CGFloat)screenHeight;

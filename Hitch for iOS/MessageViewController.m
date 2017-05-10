@@ -223,7 +223,7 @@
 }
 
 -(void)getConversation:(NSString*)personA personB:(NSString*)personB{
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -303,7 +303,7 @@
 }
 
 -(void)getAllMessages{
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -377,7 +377,7 @@
 }
 
 -(void)sendMessage:(NSString*)driver message:(NSString*)message{
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -414,7 +414,7 @@
 
 -(void)getRide{
     myTrips = [[NSMutableArray alloc] init];
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -593,7 +593,7 @@
 -(void)getTrip:(NSString*)queryNumber{
     pulltoscroll = YES;
     NSLog(@"ride id: %@",queryNumber);
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -755,7 +755,7 @@
 }
 
 -(void)sendGroupMessage:(NSString*)message{
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];

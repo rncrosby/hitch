@@ -82,7 +82,7 @@
 
 -(void)getRide{
     myRequests = [[NSMutableArray alloc] init];
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -126,7 +126,7 @@
 
 -(void)confirmApplicant:(UIButton *)sender {
     rideObject *ride = myRequests[sender.tag];
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1:5000/"];
+    NSURL *url = [NSURL URLWithString:[References backendAddress]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
