@@ -400,14 +400,21 @@
         textField.inputView = inputView;
     }
     if (textField.tag == 10) {
-        [routeCardScroll setContentOffset:CGPointMake(0, 25) animated:YES];
+    [References fadeColor:sendButton color:[References colorFromHexString:@"#EE2B2A"]];
+        [sendButton setTitle:@"STOP" forState:UIControlStateNormal];
+        if ([References screenHeight] == 568) {
+            [routeCardScroll setContentOffset:CGPointMake(0, 155) animated:YES];
+        } else {
+            
+            [routeCardScroll setContentOffset:CGPointMake(0, 25) animated:YES];
+        }
     }
     return YES;
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
     [requestSeatsField setText:[NSString stringWithFormat:@"%ld",(long)[availableSeats selectedRowInComponent:0]]];
-    seats = [availableSeats selectedRowInComponent:0];
+    seats = (int)[availableSeats selectedRowInComponent:0];
 }
 
 
@@ -807,6 +814,16 @@
                                    [rideConfirm setTitle:@"Ride Application Pending" forState:UIControlStateNormal];
                                }
                            }];
+}
+
+- (IBAction)cancelMessage:(id)sender {
+    [messageBox resignFirstResponder];
+    [routeCardScroll setContentOffset:CGPointMake(0, 0) animated:YES];
+    [References fadeColor:sendButton color:[References colorFromHexString:@"#175FC7"]];
+    [sendButton setTitle:@"SEND" forState:UIControlStateNormal];
+    if ([messageBox.text isEqualToString:@""]) {
+        [messageBox setPlaceholder:@"Contact Driver"];
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {

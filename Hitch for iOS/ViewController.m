@@ -71,9 +71,9 @@
     [References textFieldInset:emailfield];
     [References textFieldInset:passwordfield];
 //    AUTO SIGN IN
-    [emailfield setText:@"rob"];
-    [passwordfield setText:@"pass"];
-    [self signin:nil];
+//    [emailfield setText:@"rob"];
+//    [passwordfield setText:@"pass"];
+//    [self signin:nil];
 }
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
@@ -192,11 +192,20 @@
                                                            //Here your non-main thread.
                                                            [NSThread sleepForTimeInterval:1.0f];
                                                            dispatch_async(dispatch_get_main_queue(), ^{
-                                                               //Here you returns to main thread.
-                                                               NSString * storyboardName = @"Main";
-                                                               UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
-                                                               UIViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"Feed"];
-                                                               [self presentViewController:vc animated:NO completion:nil];
+                                                               if ([References screenHeight] == 568) {
+                                                                   //Here you returns to main thread.
+                                                                   NSString * storyboardName = @"smallScreens";
+                                                                   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+                                                                   UIViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"Feed"];
+                                                                   [self presentViewController:vc animated:NO completion:nil];
+                                                               } else {
+                                                                   //Here you returns to main thread.
+                                                                   NSString * storyboardName = @"Main";
+                                                                   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+                                                                   UIViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"Feed"];
+                                                                   [self presentViewController:vc animated:NO completion:nil];
+                                                               }
+                                                               
                                                            });
                                                        });
                                                    });
@@ -305,10 +314,19 @@
                                                                [NSThread sleepForTimeInterval:1.0f];
                                                                dispatch_async(dispatch_get_main_queue(), ^{
                                                                    //Here you returns to main thread.
-                                                                   NSString * storyboardName = @"Main";
-                                                                   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
-                                                                   UIViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"Feed"];
-                                                                   [self presentViewController:vc animated:YES completion:nil];
+                                                                   if ([References screenHeight] == 568) {
+                                                                       //Here you returns to main thread.
+                                                                       NSString * storyboardName = @"smallScreens";
+                                                                       UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+                                                                       UIViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"Feed"];
+                                                                       [self presentViewController:vc animated:NO completion:nil];
+                                                                   } else {
+                                                                       //Here you returns to main thread.
+                                                                       NSString * storyboardName = @"Main";
+                                                                       UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle: nil];
+                                                                       UIViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"Feed"];
+                                                                       [self presentViewController:vc animated:NO completion:nil];
+                                                                   }
                                                                });
                                                            });
                                                        });

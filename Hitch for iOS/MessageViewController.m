@@ -19,9 +19,15 @@
     arrayOfMessages = [[NSMutableArray alloc] init];
     arrayOfTripMessages = [[NSMutableArray alloc] init];
     [conversationView setContentSize:CGSizeMake([References screenWidth], [References screenHeight])];
-    [References createLine:self.view view:line xPos:menuBar.frame.origin.x yPos:menuBar.frame.origin.y+menuBar.frame.size.height+7];
     [References createLine:self.view view:line2 xPos:0 yPos:tabBar.frame.origin.y];
-    [References createLine:self.view view:line3 xPos:tripBar.frame.origin.x yPos:tripBar.frame.origin.y+tripBar.frame.size.height+7];
+    if ([References screenHeight] == 568) {
+            [References createLine:self.view view:line3 xPos:tripBar.frame.origin.x yPos:tripBar.frame.origin.y+tripBar.frame.size.height+0];
+            [References createLine:self.view view:line xPos:menuBar.frame.origin.x yPos:menuBar.frame.origin.y+menuBar.frame.size.height+0];
+    } else {
+            [References createLine:self.view view:line3 xPos:tripBar.frame.origin.x yPos:tripBar.frame.origin.y+tripBar.frame.size.height+7];
+            [References createLine:self.view view:line xPos:menuBar.frame.origin.x yPos:menuBar.frame.origin.y+menuBar.frame.size.height+7];
+    }
+
     [References cornerRadius:Done radius:5.0f];
     [References borderColor:Done color:[UIColor blackColor]];
     [References cornerRadius:messageField radius:5.0f];
@@ -34,8 +40,8 @@
     [References cornerRadius:infoTime radius:5.0f];
     [References cornerRadius:infoTemperature radius:5.0f];
     [super viewDidLoad];
-    tripDetailView.contentSize = CGSizeMake(750, 223);
-    [tripDetailView setContentSize:CGSizeMake(750, 223)];
+    tripDetailView.contentSize = CGSizeMake([References screenWidth]*2, 223);
+    [tripDetailView setContentSize:CGSizeMake([References screenWidth]*2, 223)];
     [self getAllMessages];
     [self getRide];
     // Do any additional setup after loading the view.
@@ -76,10 +82,14 @@
         [References moveDown:messageField yChange:225];
         conversationView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]);
         [textField resignFirstResponder];
-        [self sendMessage:conversationOther.text message:textField.text];
+        if (![textField.text isEqualToString:@""]) {
+                    [self sendMessage:conversationOther.text message:textField.text];
+        }
     } else if (isPanel == 2) {
         // SEND GROUP MESSAGE
-        [self sendGroupMessage:textField.text];
+        if (![textField.text isEqualToString:@""]) {
+                [self sendGroupMessage:textField.text];
+        }
         [References moveDown:_hideView yChange:225];
         [References moveDown:messageField yChange:225];
         tripView.frame = CGRectMake(0, 0, [References screenWidth], [References screenHeight]);
@@ -140,9 +150,9 @@
     [self.view bringSubviewToFront:messageField];
     [self.view bringSubviewToFront:_hideView];
     [References fade:blackOverView alpha:0.9f];
-    [References moveUp:conversationView yChange:667];
-    [References moveUp:messageField yChange:667];
-    [References moveUp:_hideView yChange:667];
+    [References moveUp:conversationView yChange:568];
+    [References moveUp:messageField yChange:568];
+    [References moveUp:_hideView yChange:568];
     statusBarLight = YES;
     [UIView animateWithDuration:0.8 animations:^{
         [self setNeedsStatusBarAppearanceUpdate];
@@ -203,9 +213,9 @@
     [self.view bringSubviewToFront:messageField];
     [self.view bringSubviewToFront:_hideView];
     [References fade:blackOverView alpha:0.9f];
-    [References moveUp:tripView yChange:1334];
-    [References moveUp:messageField yChange:667];
-    [References moveUp:_hideView yChange:667];
+    [References moveUp:tripView yChange:1136];
+    [References moveUp:messageField yChange:568];
+    [References moveUp:_hideView yChange:568];
     statusBarLight = YES;
     [UIView animateWithDuration:0.8 animations:^{
         [self setNeedsStatusBarAppearanceUpdate];
@@ -353,18 +363,18 @@
 - (IBAction)hideView:(id)sender {
     [References fadeOut:blackOverView];
     if (isPanel == 1) {
-           [References moveDown:conversationView yChange:667];
+           [References moveDown:conversationView yChange:568];
         for (int x = 0; x<=arrayOfMessages.count-1; x++) {
             [arrayOfMessages[x] removeFromSuperview];
         }
     } else if (isPanel == 2) {
-        [References moveDown:tripView yChange:1334];
+        [References moveDown:tripView yChange:1136];
         for (int x = 0; x<=arrayOfTripMessages.count-1; x++) {
             [arrayOfTripMessages[x] removeFromSuperview];
         }
     }
-    [References moveDown:messageField yChange:667];
-    [References moveDown:_hideView yChange:667];
+    [References moveDown:messageField yChange:568];
+    [References moveDown:_hideView yChange:568];
     [messageField setText:@""];
     statusBarLight = NO;
     [UIView animateWithDuration:0.8 animations:^{
@@ -851,12 +861,12 @@
         pulltoscroll = NO;
         [References fadeOut:blackOverView];
         if (isPanel == 1) {
-            [References moveDown:conversationView yChange:667];
+            [References moveDown:conversationView yChange:568];
             for (int x = 0; x<=arrayOfMessages.count-1; x++) {
                 [arrayOfMessages[x] removeFromSuperview];
             }
         } else if (isPanel == 2) {
-            [References moveDown:tripView yChange:1334];
+            [References moveDown:tripView yChange:1136];
             [routeView removeOverlay:pastOverlay.polyline];
             [routeView removeAnnotations:routeView.annotations];
             if (arrayOfTripMessages.count > 0) {
@@ -866,8 +876,8 @@
             }
 
         }
-        [References moveDown:messageField yChange:667];
-        [References moveDown:_hideView yChange:667];
+        [References moveDown:messageField yChange:568];
+        [References moveDown:_hideView yChange:568];
         [messageField setText:@""];
         statusBarLight = NO;
         [UIView animateWithDuration:0.8 animations:^{

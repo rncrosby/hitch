@@ -17,6 +17,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    // grab correct storyboard depending on screen height
+    UIStoryboard *storyboard = [self grabStoryboard];
+    
+    // display storyboard
+    self.window.rootViewController = [storyboard instantiateInitialViewController];
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
@@ -45,6 +51,32 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (UIStoryboard *)grabStoryboard {
+    
+    // determine screen size
+    int screenHeight = [UIScreen mainScreen].bounds.size.height;
+    UIStoryboard *storyboard;
+    
+    switch (screenHeight) {
+            // iPhone 5s
+        case 568:
+            storyboard = [UIStoryboard storyboardWithName:@"smallScreens" bundle:nil];
+            break;
+            
+            // iPhone 6
+        case 667:
+            storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            break;
+            
+            // iPhone 6 Plus
+        case 736:
+            storyboard = [UIStoryboard storyboardWithName:@"Main-6-Plus" bundle:nil];
+            break;
+    }
+    
+    return storyboard;
 }
 
 

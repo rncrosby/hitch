@@ -113,6 +113,7 @@
 - (IBAction)incDown:(id)sender;
 - (IBAction)cancelRideView:(id)sender;
 - (IBAction)rideConfirm:(id)sender;
+- (IBAction)cancelMessage:(id)sender;
 
 
 

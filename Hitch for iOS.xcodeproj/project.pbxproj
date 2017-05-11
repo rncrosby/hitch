@@ -61,6 +61,7 @@
 		ADE6BEA01DDF8BE6004F3F8E /* FeedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE6BE9E1DDF8BE6004F3F8E /* FeedTableViewCell.m */; };
 		ADE6BEA11DDF8BE6004F3F8E /* FeedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADE6BE9F1DDF8BE6004F3F8E /* FeedTableViewCell.xib */; };
 		ADE8C2281E96FDE100F1BAC5 /* vid.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = ADE8C2271E96FDD600F1BAC5 /* vid.mp4 */; };
+		ADFEA3571EC3B27F002D48D1 /* smallScreens.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADFEA3561EC3B27F002D48D1 /* smallScreens.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -170,6 +171,7 @@
 		ADE6BE9E1DDF8BE6004F3F8E /* FeedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedTableViewCell.m; sourceTree = "<group>"; };
 		ADE6BE9F1DDF8BE6004F3F8E /* FeedTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeedTableViewCell.xib; sourceTree = "<group>"; };
 		ADE8C2271E96FDD600F1BAC5 /* vid.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = vid.mp4; sourceTree = "<group>"; };
+		ADFEA3561EC3B27F002D48D1 /* smallScreens.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = smallScreens.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -262,6 +264,7 @@
 				ADA113201DDBDAFA00BE4980 /* Info.plist */,
 				ADA1130F1DDBDAFA00BE4980 /* Supporting Files */,
 				ADA113181DDBDAFA00BE4980 /* Main.storyboard */,
+				ADFEA3561EC3B27F002D48D1 /* smallScreens.storyboard */,
 				ADA113151DDBDAFA00BE4980 /* ViewController.h */,
 				ADA113161DDBDAFA00BE4980 /* ViewController.m */,
 				ADA113451DDC1CAB00BE4980 /* FeedViewController.h */,
@@ -468,6 +471,7 @@
 				ADB6D2951E96F5030064E7B5 /* video.mp4 in Resources */,
 				ADA1134A1DDC251800BE4980 /* destination.png in Resources */,
 				AD7403F71DDE8D9600B59A36 /* testImage.jpg in Resources */,
+				ADFEA3571EC3B27F002D48D1 /* smallScreens.storyboard in Resources */,
 				AD6357091EB1797C003796EF /* passenger.jpg in Resources */,
 				ADCBCF111DF4FFE400294EF3 /* wminus.png in Resources */,
 				ADCBCF151DF5026400294EF3 /* wcancel.png in Resources */,
