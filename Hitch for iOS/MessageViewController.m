@@ -150,9 +150,15 @@
     [self.view bringSubviewToFront:messageField];
     [self.view bringSubviewToFront:_hideView];
     [References fade:blackOverView alpha:0.9f];
-    [References moveUp:conversationView yChange:568];
-    [References moveUp:messageField yChange:568];
-    [References moveUp:_hideView yChange:568];
+    if ([References screenHeight] == 568) {
+        [References moveUp:conversationView yChange:568];
+        [References moveUp:messageField yChange:568];
+        [References moveUp:_hideView yChange:568];
+    } else {
+        [References moveUp:conversationView yChange:667];
+        [References moveUp:messageField yChange:667];
+        [References moveUp:_hideView yChange:667];
+    }
     statusBarLight = YES;
     [UIView animateWithDuration:0.8 animations:^{
         [self setNeedsStatusBarAppearanceUpdate];
@@ -213,9 +219,15 @@
     [self.view bringSubviewToFront:messageField];
     [self.view bringSubviewToFront:_hideView];
     [References fade:blackOverView alpha:0.9f];
-    [References moveUp:tripView yChange:1136];
-    [References moveUp:messageField yChange:568];
-    [References moveUp:_hideView yChange:568];
+    if ([References screenHeight] == 568) {
+        [References moveUp:tripView yChange:1136];
+        [References moveUp:messageField yChange:568];
+        [References moveUp:_hideView yChange:568];
+    } else {
+        [References moveUp:tripView yChange:1334];
+        [References moveUp:messageField yChange:667];
+        [References moveUp:_hideView yChange:667];
+    }
     statusBarLight = YES;
     [UIView animateWithDuration:0.8 animations:^{
         [self setNeedsStatusBarAppearanceUpdate];
@@ -363,18 +375,31 @@
 - (IBAction)hideView:(id)sender {
     [References fadeOut:blackOverView];
     if (isPanel == 1) {
-           [References moveDown:conversationView yChange:568];
+        if ([References screenHeight] == 568) {
+            [References moveDown:conversationView yChange:568];
+        } else {
+            [References moveDown:conversationView yChange:667];
+        }
         for (int x = 0; x<=arrayOfMessages.count-1; x++) {
             [arrayOfMessages[x] removeFromSuperview];
         }
     } else if (isPanel == 2) {
-        [References moveDown:tripView yChange:1136];
+        if ([References screenHeight] == 568) {
+            [References moveDown:tripView yChange:1136];
+        } else {
+            [References moveDown:tripView yChange:1334];
+        }
         for (int x = 0; x<=arrayOfTripMessages.count-1; x++) {
             [arrayOfTripMessages[x] removeFromSuperview];
         }
     }
-    [References moveDown:messageField yChange:568];
-    [References moveDown:_hideView yChange:568];
+    if ([References screenHeight] == 568) {
+        [References moveDown:messageField yChange:568];
+        [References moveDown:_hideView yChange:568];
+    } else {
+        [References moveDown:messageField yChange:667];
+        [References moveDown:_hideView yChange:667];
+    }
     [messageField setText:@""];
     statusBarLight = NO;
     [UIView animateWithDuration:0.8 animations:^{
@@ -450,6 +475,7 @@
                                    NSLog(@"Unknown Error Occured");
                                } else {
                                    NSString *responseBody = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                                   NSLog(@"%@",responseBody);
                                    myTrips_raw = [responseBody componentsSeparatedByString:@"~"];
                                    myRides = [myTrips_raw[1] intValue];
                                    if ([myTrips_raw[0] isEqualToString:@"Y"]) {
@@ -861,12 +887,20 @@
         pulltoscroll = NO;
         [References fadeOut:blackOverView];
         if (isPanel == 1) {
-            [References moveDown:conversationView yChange:568];
+            if ([References screenHeight] == 568) {
+                [References moveDown:conversationView yChange:568];
+            } else {
+                [References moveDown:conversationView yChange:667];
+            }
             for (int x = 0; x<=arrayOfMessages.count-1; x++) {
                 [arrayOfMessages[x] removeFromSuperview];
             }
         } else if (isPanel == 2) {
-            [References moveDown:tripView yChange:1136];
+            if ([References screenHeight] == 568) {
+                [References moveDown:tripView yChange:1136];
+            } else {
+                [References moveDown:tripView yChange:1334];
+            }
             [routeView removeOverlay:pastOverlay.polyline];
             [routeView removeAnnotations:routeView.annotations];
             if (arrayOfTripMessages.count > 0) {
@@ -876,8 +910,13 @@
             }
 
         }
-        [References moveDown:messageField yChange:568];
-        [References moveDown:_hideView yChange:568];
+        if ([References screenHeight] == 568) {
+            [References moveDown:messageField yChange:568];
+            [References moveDown:_hideView yChange:568];
+        } else {
+            [References moveDown:messageField yChange:667];
+            [References moveDown:_hideView yChange:667];
+        }
         [messageField setText:@""];
         statusBarLight = NO;
         [UIView animateWithDuration:0.8 animations:^{

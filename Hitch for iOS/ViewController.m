@@ -71,8 +71,8 @@
     [References textFieldInset:emailfield];
     [References textFieldInset:passwordfield];
 //    AUTO SIGN IN
-//    [emailfield setText:@"rob"];
-//    [passwordfield setText:@"pass"];
+    [emailfield setText:@"rob"];
+    [passwordfield setText:@"pass"];
 //    [self signin:nil];
 }
 

@@ -2,6 +2,7 @@ from flask import Flask
 from flask import json
 from flask import request, redirect, url_for
 from tinydb import TinyDB, Query
+import re
 import base64
 
 app = Flask(__name__)
@@ -19,16 +20,20 @@ def index():
         User = Query()
         if len(db.search(User.rideFounder == name)) == 0:
             print("Error: No user for the name")
+            db.close()
             return("Error: No user for the name")
         else:
             returneddata = db.search(User.rideFounder == name)
             userInfo = returneddata[0]
             if userInfo['password'] == password:
                 print("Success")
+                db.close()
                 return("Success")
             else:
                 print("Error: Incorrect Password")
+                db.close()
                 return("Error: Incorrect Password")
+
     # SIGN UP
     if accesstype == 'signup':
         name = json['username']
@@ -39,8 +44,10 @@ def index():
         if len(db.search(User.rideFounder == name)) == 0:
             db.insert({'image': '', 'rideFounder': name, 'password': password, 'friends': '', 'what': '', 'from': '', 'to': ''})
             print('Thanks for signing up, %s' % name)
+            db.close()
             return 'Success'
         else:
+            db.close()
             print("Already a user with that name")
             return 'Already a user with that name'
     # SAVE IMAGE
@@ -51,7 +58,11 @@ def index():
         User = Query()
         if len(db.search(User.rideFounder == name)) == 0:
             db.update({'image': imageString})
+            db.close()
             return 'Succes'
+        else:
+            db.close()
+            return 'error'
     # POST RIDE
     if accesstype == 'postDrive':
         name = json['username']
@@ -65,6 +76,7 @@ def index():
         rideID = json['rideID']
         ridedb = TinyDB('rides.json')
         ridedb.insert({'rideFounder': name, 'riderNames': '', 'messages' : '','id': rideID, 'cost': cost,'plainText': textForm, 'plainTime' : timetextForm,'rideFrom': zipFrom, 'rideTo': zipTo, 'date': float(when), 'seats': int(seats), 'riders': int(0)})
+        ridedb.close()
         print 'Success: Ride Posted'
         return 'Ride Request Posted'
     # APPLY FOR RIDE
@@ -86,6 +98,7 @@ def index():
         cost = userInfo['cost']
         ridedb = TinyDB('pendingrides.json')
         ridedb.insert({'rideFounder': name, 'applicant': rider,'id': temprideid, 'cost': cost,'plainText': textForm, 'plainTime' : timetextForm,'rideFrom': zipFrom, 'rideTo': zipTo, 'date': float(when), 'seats': int(seats), 'riders': int(0)})
+        ridedb.close()
         print 'Success: Ride Requested'
         return 'Ride Request Posted'
     # CHECK IF ALREADY APPLIED
@@ -96,8 +109,10 @@ def index():
         returneddata = ridedb.search(Search.applicant == rider)
         if len(returneddata) == 0:
             print("No Applicant")
+            ridedb.close()
             return "N"
         else:
+            ridedb.close()
             print("Already applied, restricting applications")
             return "Y"
     # CONFIRM APPLICATION
@@ -117,6 +132,8 @@ def index():
         pendingSearch = Query()
         pendingdb.remove(pendingSearch.id == rideID)
         print 'Success: Ride Confirmed'
+        ridedb.close()
+        pendingdb.close()
         return 'Ride Request Posted'
     # SEND MESSAGE
     if accesstype == 'sendMessage':
@@ -126,6 +143,7 @@ def index():
         ridedb = TinyDB('messages.json')
         ridedb.insert({'sender': sender, 'reciever': reciever, 'message': text})
         print 'Success: Message Sent'
+        ridedb.close()
         return 'Message Sent'
     # GET CONVERSATIONS
     if accesstype == 'getConversations':
@@ -140,8 +158,10 @@ def index():
                 myList.sort()
                 returnObjects = returnObjects + myList[0] + ':' + myList[1] + '~'
             print "Found " + str(len(returneddata)) + " Messages"
+            ridedb.close()
             return returnObjects
         print 'Error: No Messages'
+        ridedb.close()
         return 'Error: No Messages'
     # GET MESSAGES
     if accesstype == 'getMessages':
@@ -158,6 +178,7 @@ def index():
                 returnObjects = returnObjects + myList[0] + ':' + myList[1] +':'+ myList[2] + '~'
             return returnObjects
             print returnObjects
+        ridedb.close()
         print 'Error: No Messages'
         return 'Error: No Messages'
     # GET RIDE
@@ -177,9 +198,11 @@ def index():
                 returnObjects = returnObjects + str(currentObject['date']) + '~'
                 returnObjects = returnObjects + str(currentObject['cost']) + '~'
                 returnObjects = returnObjects + str(currentObject['seats'])
+            ridedb.close()
             print "Success: Found Ride"
             return returnObjects
         else:
+            ridedb.close()
             print 'Error'
             return 'Error'
     # TEST GET RIDE RETURNS ACTUAL OBJECT
@@ -189,9 +212,11 @@ def index():
         Search = Query()
         returneddata = ridedb.search(Search.id == rideID)
         if returneddata != 0:
+            ridedb.close()
             return returneddata
             print 'Ride Returned'
         else:
+            ridedb.close()
             print 'Error'
             return 'Error'
     # GET TRIP
@@ -214,9 +239,11 @@ def index():
                 returnObjects = returnObjects + currentObject['riderNames'] + '~' # 7
                 returnObjects = returnObjects + str(currentObject['riders']) + '~' # 8
                 returnObjects = returnObjects + str(currentObject['seats']) # 9
+            ridedb.close()
             print "Success: Found Ride"
             return returnObjects
         else:
+            ridedb.close()
             print 'Error'
             return 'Error'
     # SEND GROUP MESSAGE
@@ -231,6 +258,7 @@ def index():
         messages = rideObject['messages']
         messages = messages + message + '&&' + sender + '%'
         ridedb.update({'messages': messages}, Search.id == rideID)
+        ridedb.close()
         print 'Success: Message Sent'
         return messages
     # SEARCH MY RIDES
@@ -247,6 +275,7 @@ def index():
         pendingdata = pendingdb.search(Search.applicant == user)
         confirmeddb = TinyDB('rides.json')
         Search = Query()
+        Rider = Query()
         confirmeddata = confirmeddb.search(((Search.applicant == user) | (Search.rideFounder == user)) & (Search.riders > 0))
         tripCount = len(pendingdata) + len(confirmeddata)
         returnObjects = returnObjects + str(tripCount) + '~'
@@ -278,11 +307,15 @@ def index():
                 returnObjects = returnObjects + str(currentObject['id']) + '~'
                 returnObjects = returnObjects + str(currentObject['riders']) + '~'
                 returnObjects = returnObjects + 'CONFIRMED' + '~'
-            print returnObjects
-            return returnObjects
-        else:
+        returnObjects = returnObjects + tempReturnString
+        if len(returnObjects) == 0:
+            confirmeddb.close()
+            pendingdb.close()
             print 'Error'
             return 'Error'
+        else:
+            print returnObjects
+            return returnObjects
     # GET MY REQUESTS
     if accesstype == 'myRequests':
         returnObjects = ''
@@ -297,9 +330,11 @@ def index():
                 returnObjects = returnObjects + currentObject['applicant'] + '~'
                 returnObjects = returnObjects + str(currentObject['id']) + '~'
                 returnObjects = returnObjects + currentObject['plainTime'] + '~'
+            ridedb.close()
             print returnObjects
             return returnObjects
         else:
+            ridedb.close()
             print 'Error'
             return 'Error'
     # SEARCH RIDES
@@ -324,9 +359,11 @@ def index():
                     returnObjects = returnObjects + currentObject['id'] + '~'
                     returnObjects = returnObjects + str(currentObject['cost']) + '~'
                     returnObjects = returnObjects + str(currentObject['seats']) + '%'
+                ridedb.close()
                 print "Success: Found Rides"
                 return returnObjects
             else:
+                ridedb.close()
                 print 'Error'
                 return 'Error'
         else:
@@ -342,14 +379,16 @@ def index():
                     returnObjects = returnObjects + currentObject['id'] + '~'
                     returnObjects = returnObjects + str(currentObject['cost']) + '~'
                     returnObjects = returnObjects + str(currentObject['seats']) + '%'
+                ridedb.close()
                 print "Success: Found Rides"
                 return returnObjects
             else:
+                ridedb.close()
                 print 'Error'
                 return 'Error'
-
+        db.close()
 
 
 
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(debug = True, host= '0.0.0.0')

@@ -25,6 +25,7 @@
 		AD7411791DF5740C006CD907 /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = AD74116F1DF5740C006CD907 /* AFXMLRequestOperation.m */; };
 		AD74117A1DF5740C006CD907 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7411711DF5740C006CD907 /* UIImageView+AFNetworking.m */; };
 		AD74117C1DF57C2F006CD907 /* car.png in Resources */ = {isa = PBXBuildFile; fileRef = AD74117B1DF57C2F006CD907 /* car.png */; };
+		AD7A7B3D1EC41780006B22BE /* default.gpx in Resources */ = {isa = PBXBuildFile; fileRef = AD7A7B3C1EC41780006B22BE /* default.gpx */; };
 		AD7B4CFF1EB19307002CD33F /* rideObject.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7B4CFE1EB19307002CD33F /* rideObject.m */; };
 		AD7B4D011EB1A52C002CD33F /* driver.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AD7B4D001EB1A52C002CD33F /* driver.jpg */; };
 		AD7B4D041EB1B7AA002CD33F /* RequestsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD7B4D031EB1B7AA002CD33F /* RequestsViewController.m */; };
@@ -114,6 +115,7 @@
 		AD7411701DF5740C006CD907 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		AD7411711DF5740C006CD907 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		AD74117B1DF57C2F006CD907 /* car.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = car.png; sourceTree = "<group>"; };
+		AD7A7B3C1EC41780006B22BE /* default.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = default.gpx; sourceTree = "<group>"; };
 		AD7B4CFD1EB19307002CD33F /* rideObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rideObject.h; sourceTree = "<group>"; };
 		AD7B4CFE1EB19307002CD33F /* rideObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = rideObject.m; sourceTree = "<group>"; };
 		AD7B4D001EB1A52C002CD33F /* driver.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = driver.jpg; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 		ADA113031DDBDAFA00BE4980 = {
 			isa = PBXGroup;
 			children = (
+				AD7A7B3C1EC41780006B22BE /* default.gpx */,
 				ADA1130E1DDBDAFA00BE4980 /* Hitch for iOS */,
 				ADA113281DDBDAFA00BE4980 /* Hitch for iOSTests */,
 				ADA113331DDBDAFA00BE4980 /* Hitch for iOSUITests */,
@@ -487,6 +490,7 @@
 				AD7B4D091EB1B843002CD33F /* RequestTableViewCell.xib in Resources */,
 				ADA1134B1DDC251800BE4980 /* current.png in Resources */,
 				ADE6BEA11DDF8BE6004F3F8E /* FeedTableViewCell.xib in Resources */,
+				AD7A7B3D1EC41780006B22BE /* default.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

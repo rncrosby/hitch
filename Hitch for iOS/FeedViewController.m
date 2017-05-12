@@ -232,7 +232,7 @@
                              [self queryRide];
                              // END FOUND ZIP CODE AND EVERYTHING
                          } else {
-                             
+                             NSLog(@"no zip");
                              // NO ZIP
                              CLGeocoder* ageocoder = [CLGeocoder new];
                              CLLocation* tempLocation = [[CLLocation alloc] initWithLatitude:placemark.location.coordinate.latitude longitude:placemark.location.coordinate.longitude];
@@ -961,6 +961,7 @@ typedef void(^addressCompletion)(NSString *);
                                        NSLog(@"Unknown Error Occured");
                                         } else {
                                        NSString *responseBody = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                                            NSLog(@"ayy %@",responseBody);
                                        rides = [responseBody componentsSeparatedByString:@"%"];
                                             [table reloadData];
                                            
